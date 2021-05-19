@@ -59,7 +59,6 @@ func (u *Client) Request(url string, reqBody interface{}) (*http.Response, error
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(body))
 	url = fmt.Sprintf("%s?sign=%s", url, u.Sign(url, string(body)))
 	fmt.Println(url)
 	fmt.Println(string(body))
