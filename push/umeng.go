@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/yzchan/umeng-go/push/notification"
+	"log"
 	"net/http"
 )
 
@@ -18,22 +19,20 @@ const (
 	CancelPath string = "/api/cancel"
 	UploadPath string = "/upload"
 
-	// TagBase 标签功能需要开通U-Push Pro
-	TagBase       string = "/api/tag"
-	TagAddPath    string = TagBase + "/add"
-	TagListPath   string = TagBase + "/list"
-	TagSetPath    string = TagBase + "/set"
-	TagDeletePath string = TagBase + "/delete"
-	TagClearPath  string = TagBase + "/clear"
+	TagAddPath    string = "/api/tag/add"
+	TagListPath   string = "/api/tag/list"
+	TagSetPath    string = "/api/tag/set"
+	TagDeletePath string = "/api/tag/delete"
+	TagClearPath  string = "/api/tag/clear"
 
-	PlatformAndroid int64 = 1
-	PlatformIOS     int64 = 0
+	PlatformAndroid int = 1
+	PlatformIOS     int = 0
 )
 
 type Client struct {
-	Appkey       string `json:"appkey"`
-	MasterSecret string `json:"-"`
-	Platform     int64  `json:"platform"`
+	Appkey       string
+	MasterSecret string
+	Platform     int
 }
 
 type Umeng struct {
@@ -41,19 +40,22 @@ type Umeng struct {
 	IOS     Client
 }
 
-func NewUmeng(androidKey string, androidSecret string, iosKey string, iosSecret string) *Umeng {
+func NewUmeng() *Umeng {
 	return &Umeng{
-		Android: Client{
-			Appkey:       androidKey,
-			MasterSecret: androidSecret,
-			Platform:     PlatformAndroid,
-		},
-		IOS: Client{
-			Appkey:       iosKey,
-			MasterSecret: iosSecret,
-			Platform:     PlatformIOS,
-		},
+		Android: Client{Platform: PlatformAndroid},
+		IOS:     Client{Platform: PlatformIOS},
 	}
+}
+
+func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
+	u.Android.Appkey = appkey
+	u.Android.MasterSecret = secret
+	return u
+}
+func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
+	u.IOS.Appkey = appkey
+	u.IOS.MasterSecret = secret
+	return u
 }
 
 func (u *Client) Send(cast notification.Caster) (*http.Response, error) {
@@ -68,8 +70,8 @@ func (u *Client) Request(url string, reqBody interface{}) (*http.Response, error
 		return nil, err
 	}
 	url = fmt.Sprintf("%s?sign=%s", url, u.Sign(url, string(body)))
-	fmt.Println(url)
-	fmt.Println(string(body))
+	log.Println(url)
+	log.Println(string(body))
 	return http.Post(url, "application/json", bytes.NewBuffer(body))
 }
 

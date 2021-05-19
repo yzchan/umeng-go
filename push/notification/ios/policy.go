@@ -6,3 +6,8 @@ type Policy struct {
 	notification.Policy
 	ApnsCollapseId string `json:"apns_collapse_id,omitempty"`
 }
+
+func (p *Policy) SetApnsCollapseId(id string) *Policy {
+	p.ApnsCollapseId = id
+	return p
+}
