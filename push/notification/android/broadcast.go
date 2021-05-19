@@ -4,7 +4,6 @@ import "github.com/yzchan/umeng-go/push/notification"
 
 type Broadcast struct {
 	notification.Cast
-	DeviceTokens string  `json:"device_tokens"`
 	Payload      Payload `json:"payload"`
 	MiPush
 }

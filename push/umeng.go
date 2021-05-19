@@ -18,6 +18,14 @@ const (
 	CancelPath string = "/api/cancel"
 	UploadPath string = "/upload"
 
+	// TagBase 标签功能需要开通U-Push Pro
+	TagBase       string = "/api/tag"
+	TagAddPath    string = TagBase + "/add"
+	TagListPath   string = TagBase + "/list"
+	TagSetPath    string = TagBase + "/set"
+	TagDeletePath string = TagBase + "/delete"
+	TagClearPath  string = TagBase + "/clear"
+
 	PlatformAndroid int64 = 1
 	PlatformIOS     int64 = 0
 )
@@ -38,12 +46,12 @@ func NewUmeng(androidKey string, androidSecret string, iosKey string, iosSecret 
 		Android: Client{
 			Appkey:       androidKey,
 			MasterSecret: androidSecret,
-			Platform:     1,
+			Platform:     PlatformAndroid,
 		},
 		IOS: Client{
 			Appkey:       iosKey,
 			MasterSecret: iosSecret,
-			Platform:     0,
+			Platform:     PlatformIOS,
 		},
 	}
 }
@@ -55,7 +63,7 @@ func (u *Client) Send(cast notification.Caster) (*http.Response, error) {
 }
 
 func (u *Client) Request(url string, reqBody interface{}) (*http.Response, error) {
-	body, err := json.MarshalIndent(reqBody, "", "    ")
+	body, err := json.Marshal(reqBody)
 	if err != nil {
 		return nil, err
 	}

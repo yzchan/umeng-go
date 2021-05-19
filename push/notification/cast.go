@@ -13,6 +13,8 @@ type Cast struct {
 	Timestamp      int64  `json:"timestamp"`
 	Description    string `json:"description"`
 	ProductionMode bool   `json:"production_mode"`
+	ReceiptUrl     string `json:"receipt_url,omitempty"`  // U-Push Pro 回执地址
+	ReceiptType    string `json:"receipt_type,omitempty"` // U-Push Pro 回执类型
 }
 
 func (u *Cast) SetAppkey(key string) *Cast {
