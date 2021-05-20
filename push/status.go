@@ -2,7 +2,6 @@ package push
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"time"
 )
 
@@ -36,13 +35,7 @@ func (u *Client) Status(taskId string) (ret StatusResp, err error) {
 		return
 	}
 
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(retStr, &ret)
+	err = json.Unmarshal(resp, &ret)
 	if err != nil {
 		return
 	}

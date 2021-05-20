@@ -1,6 +1,9 @@
 package android
 
-import "github.com/yzchan/umeng-go/push/notification"
+import (
+	"github.com/yzchan/umeng-go/push/notification"
+	"time"
+)
 
 type Customizedcast struct {
 	notification.Cast
@@ -8,15 +11,15 @@ type Customizedcast struct {
 	Alias     string  `json:"alias,omitempty"`
 	FileId    string  `json:"file_id,omitempty"`
 	Payload   Payload `json:"payload"`
+	Policy    Policy  `json:"policy,omitempty"`
 	MiPush
 }
 
 func NewCustomizedcast() *Customizedcast {
 	cast := &Customizedcast{}
 	cast.Type = "customizedcast"
-	cast.SetProductionMode(true)
 	cast.Payload.Initial()
-	cast.Payload.SetDisplayType("notification")
+	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

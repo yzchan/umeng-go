@@ -3,22 +3,23 @@ package android
 import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
+	"time"
 )
 
 type Groupcast struct {
 	notification.Cast
-	DeviceTokens string  `json:"device_tokens"`
-	Payload      Payload `json:"payload"`
+	DeviceTokens string      `json:"device_tokens"`
+	Payload      Payload     `json:"payload"`
+	Policy       Policy      `json:"policy,omitempty"`
+	Filter       interface{} `json:"filter"`
 	MiPush
-	Filter interface{} `json:"filter"`
 }
 
 func NewGroupcast() *Groupcast {
 	cast := &Groupcast{}
-	cast.Type = "unicast"
-	cast.SetProductionMode(true)
+	cast.Type = "groupcast"
 	cast.Payload.Initial()
-	cast.Payload.SetDisplayType("notification")
+	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

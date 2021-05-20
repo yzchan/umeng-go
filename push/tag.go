@@ -1,7 +1,7 @@
 package push
 
 import (
-	"io/ioutil"
+	"encoding/json"
 	"strings"
 	"time"
 )
@@ -29,91 +29,61 @@ func (u *Client) buildTagReq() (req *tagReq) {
 	return req
 }
 
-func (u *Client) AddTag(device string, tags []string) (ret string, err error) {
-	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
-
-	resp, err := u.Request(Host+TagAddPath, data)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	ret = string(retStr)
-	return
-}
-
-// ListTag 查询设备标签
-func (u *Client) ListTag(device string) (ret string, err error) {
+// ListTags 查询设备标签
+func (u *Client) ListTags(device string) (tags []string, err error) {
 	data := u.buildTagReq().setDeviceToken(device)
-
-	resp, err := u.Request(Host+TagListPath, data)
+	result, err := u.Request(Host+TagListPath, data)
 	if err != nil {
 		return
 	}
-
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
+	var v struct {
+		Ret  string `json:"ret"`
+		Data struct {
+			Data struct {
+				Tags string `json:"tags"`
+			} `json:"data"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(result, &v)
 	if err != nil {
 		return
 	}
-	ret = string(retStr)
-	return
+	return strings.Split(v.Data.Data.Tags, ","), nil
 }
 
-// SetTag 该方法会清掉原来设置的tag
-func (u *Client) SetTag(device string, tags []string) (ret string, err error) {
+// AddTags 添加标签
+func (u *Client) AddTags(device string, tags []string) (err error) {
 	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
-
-	resp, err := u.Request(Host+TagSetPath, data)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	ret = string(retStr)
+	_, err = u.Request(Host+TagAddPath, data)
 	return
 }
 
-// DeleteTag 删除设备标签
-func (u *Client) DeleteTag(device string, tags []string) (ret string, err error) {
+func (u *Client) AddTag(device string, tag string) (err error) {
+	return u.AddTags(device, []string{tag})
+}
+
+// SetTags 该方法会清掉原来设置的tag
+func (u *Client) SetTags(device string, tags []string) (err error) {
 	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
-
-	resp, err := u.Request(Host+TagDeletePath, data)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	ret = string(retStr)
+	_, err = u.Request(Host+TagSetPath, data)
 	return
 }
 
-// ClearTag 清除设备标签
-func (u *Client) ClearTag(device string) (ret string, err error) {
+// DeleteTags 删除设备标签
+func (u *Client) DeleteTags(device string, tags []string) (err error) {
+	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = u.Request(Host+TagDeletePath, data)
+	return
+}
+
+// DeleteTag 删除单个标签
+func (u *Client) DeleteTag(device string, tag string) (err error) {
+	return u.DeleteTags(device, []string{tag})
+}
+
+// ClearTags 清除设备标签
+func (u *Client) ClearTags(device string) (err error) {
 	data := u.buildTagReq().setDeviceToken(device)
-
-	resp, err := u.Request(Host+TagClearPath, data)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-	ret = string(retStr)
+	_, err = u.Request(Host+TagClearPath, data)
 	return
 }

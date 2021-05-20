@@ -5,10 +5,12 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/yzchan/umeng-go/push/notification"
-	"log"
+	"io/ioutil"
 	"net/http"
+	"reflect"
 )
 
 const (
@@ -58,21 +60,78 @@ func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
 	return u
 }
 
-func (u *Client) Send(cast notification.Caster) (*http.Response, error) {
+// PreView 预览推送消息体
+func (u *Client) PreView(cast notification.Caster) {
 	cast.SetAppkey(u.Appkey)
-	cast.SetTimestamp()
-	return u.Request(Host+SendPath, cast)
+	t := reflect.TypeOf(cast)
+	fmt.Printf("===============[%s]===============\n", t.String())
+	encoded, err := json.MarshalIndent(cast, "", "    ")
+	if err != nil {
+		fmt.Println("json marshal err:", err.Error())
+	} else {
+		fmt.Println(string(encoded))
+	}
+	fmt.Printf("===============[%s]===============\n", t.String())
 }
 
-func (u *Client) Request(url string, reqBody interface{}) (*http.Response, error) {
+// Check 检测消息是否合法
+func (u *Client) Check(cast notification.Caster) {
+	// TODO
+}
+
+// Send 发送消息
+func (u *Client) Send(cast notification.Caster) ([]byte, error) {
+	cast.SetAppkey(u.Appkey)
+	result, err := u.Request(Host+SendPath, cast)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+type FailResp struct {
+	Ret  string     `json:"ret"`
+	Data UmengError `json:"data"`
+}
+
+type UmengError struct {
+	Code string `json:"error_code"`
+	Msg  string `json:"error_msg"`
+}
+
+func (e *UmengError) Error() string {
+	return fmt.Sprintf("Umeng Resonse Error:[%s]%s", e.Code, e.Msg)
+}
+
+func (u *Client) Request(url string, reqBody interface{}) ([]byte, error) {
 	body, err := json.Marshal(reqBody)
 	if err != nil {
 		return nil, err
 	}
 	url = fmt.Sprintf("%s?sign=%s", url, u.Sign(url, string(body)))
-	log.Println(url)
-	log.Println(string(body))
-	return http.Post(url, "application/json", bytes.NewBuffer(body))
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var content []byte
+	content, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// 统一处理请求失败
+	if resp.StatusCode == 400 {
+		var fail FailResp
+		err = json.Unmarshal(content, &fail)
+		if err != nil {
+			return nil, err
+		}
+		return nil, &fail.Data
+	} else if resp.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("umeng response code:%d. %s", resp.StatusCode, content))
+	}
+	return content, nil
 }
 
 func (u *Client) Sign(url string, body string) string {

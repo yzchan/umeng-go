@@ -2,7 +2,6 @@ package push
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"time"
 )
@@ -41,19 +40,10 @@ func (u *Client) Upload(content string) (fileId string, err error) {
 		return
 	}
 
-	defer resp.Body.Close()
-	retStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-
 	result := UploadResp{}
-	err = json.Unmarshal(retStr, &result)
+	err = json.Unmarshal(resp, &result)
 	if err != nil {
 		return
-	}
-	if result.Ret == "FAIL" {
-		return "", errors.New("upload err:" + result.Data.ErrorMsg)
 	}
 	fileId = result.Data.FileId
 	return

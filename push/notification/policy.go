@@ -1,5 +1,9 @@
 package notification
 
+import "time"
+
+const TimeFormat = "2006-01-02 15:04:05"
+
 type Policy struct {
 	StartTime  string `json:"start_time,omitempty"`
 	ExpireTime string `json:"expire_time,omitempty"`
@@ -7,13 +11,13 @@ type Policy struct {
 	OutBizNo   string `json:"out_biz_no,omitempty"`
 }
 
-func (p *Policy) SetStartTime(time string) *Policy {
-	p.StartTime = time
+func (p *Policy) SetStartTime(time time.Time) *Policy {
+	p.StartTime = time.Format(TimeFormat)
 	return p
 }
 
-func (p *Policy) SetExpireTime(time string) *Policy {
-	p.ExpireTime = time
+func (p *Policy) SetExpireTime(time time.Time) *Policy {
+	p.ExpireTime = time.Format(TimeFormat)
 	return p
 }
 

@@ -2,6 +2,7 @@ package ios
 
 import (
 	"github.com/yzchan/umeng-go/push/notification"
+	"time"
 )
 
 type Customizedcast struct {
@@ -10,14 +11,15 @@ type Customizedcast struct {
 	Alias     string  `json:"alias,omitempty"`   // 可选，别名，多个别名用,隔开
 	FileId    string  `json:"file_id,omitempty"` // 可选，将别名上传之后的文件Id
 	Payload   Payload `json:"payload"`
+	Policy    Policy  `json:"policy,omitempty"`
 }
 
 func NewCustomizedcast() *Customizedcast {
 	cast := &Customizedcast{}
 	cast.Type = "customizedcast"
-	cast.SetProductionMode(true)
 	cast.Payload = make(Payload)
 	cast.Payload.Initial()
+	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

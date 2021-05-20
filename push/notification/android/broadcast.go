@@ -1,18 +1,21 @@
 package android
 
-import "github.com/yzchan/umeng-go/push/notification"
+import (
+	"github.com/yzchan/umeng-go/push/notification"
+	"time"
+)
 
 type Broadcast struct {
 	notification.Cast
-	Payload      Payload `json:"payload"`
+	Payload Payload `json:"payload"`
+	Policy  Policy  `json:"policy,omitempty"`
 	MiPush
 }
 
 func NewBroadcast() *Broadcast {
 	cast := &Broadcast{}
 	cast.Type = "broadcast"
-	cast.SetProductionMode(true)
 	cast.Payload.Initial()
-	cast.Payload.SetDisplayType("notification")
+	cast.Timestamp = time.Now().Unix()
 	return cast
 }
