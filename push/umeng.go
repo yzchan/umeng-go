@@ -14,18 +14,27 @@ import (
 )
 
 const (
-	Host       string = "http://msg.umeng.com"
-	HttpsHost  string = "https://msgapi.umeng.com"
-	SendPath   string = "/api/send"
-	StatusPath string = "/api/status"
-	CancelPath string = "/api/cancel"
-	UploadPath string = "/upload"
+	Host           string = "http://msg.umeng.com"
+	HttpsHost      string = "https://msgapi.umeng.com"
+	SendPath       string = "/api/send"
+	StatusPath     string = "/api/status"
+	ChanDataPath   string = "/api/channel/data"
+	QuotaQueryPath string = "/api/quota/query"
+	CancelPath     string = "/api/cancel"
+	UploadPath     string = "/upload"
 
 	TagAddPath    string = "/api/tag/add"
 	TagListPath   string = "/api/tag/list"
 	TagSetPath    string = "/api/tag/set"
 	TagDeletePath string = "/api/tag/delete"
 	TagClearPath  string = "/api/tag/clear"
+
+	TmplAddPath    string = "/api/template/add"
+	TmplDeletePath string = "/api/template/delete"
+	TmplGetPath    string = "/api/template/get"
+	TmplListPath   string = "/api/template/list"
+	TmplSendPath   string = "/api/template/send"
+	TmplMsgPath    string = "/api/template/msg"
 
 	PlatformAndroid int = 1
 	PlatformIOS     int = 0
@@ -119,7 +128,7 @@ func (u *Client) Request(url string, reqBody interface{}) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	//fmt.Println(string(content))
 	// 统一处理请求失败
 	if resp.StatusCode == 400 {
 		var fail FailResp

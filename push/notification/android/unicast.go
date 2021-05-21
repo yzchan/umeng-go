@@ -11,6 +11,7 @@ type Unicast struct {
 	Payload      Payload `json:"payload"`
 	Policy       Policy  `json:"policy,omitempty"`
 	MiPush
+	TemplateName string `json:"template_name,omitempty"`
 }
 
 func NewUnicast() *Unicast {
@@ -22,6 +23,14 @@ func NewUnicast() *Unicast {
 }
 
 func (u *Unicast) SetDeviceToken(token string) *Unicast {
+	if u.TemplateName != "" { // 模板消息 禁止设置DeviceTokens
+		return u
+	}
 	u.DeviceTokens = token
 	return u
+}
+
+func (u *Unicast) SetAsTemplate(name string) {
+	u.TemplateName = name
+	u.DeviceTokens = "${device_tokens}"
 }

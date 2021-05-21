@@ -13,6 +13,7 @@ type Customizedcast struct {
 	Payload   Payload `json:"payload"`
 	Policy    Policy  `json:"policy,omitempty"`
 	MiPush
+	TemplateName string `json:"template_name,omitempty"`
 }
 
 func NewCustomizedcast() *Customizedcast {
@@ -29,11 +30,23 @@ func (c *Customizedcast) SetAliasType(aliasType string) *Customizedcast {
 }
 
 func (c *Customizedcast) SetAlias(alias string) *Customizedcast {
+	if c.TemplateName != "" {
+		return c
+	}
 	c.Alias = alias
 	return c
 }
 
 func (c *Customizedcast) SetFileId(fileId string) *Customizedcast {
+	if c.TemplateName != "" {
+		return c
+	}
 	c.FileId = fileId
 	return c
+}
+
+func (c *Customizedcast) SetAsTemplate(name string) {
+	c.TemplateName = name
+	c.Alias = "${alias}"
+	c.FileId = ""
 }

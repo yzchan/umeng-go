@@ -41,3 +41,27 @@ func (u *Client) Status(taskId string) (ret StatusResp, err error) {
 	}
 	return
 }
+
+func (u *Client) ChannelData(taskId string) ([]byte, error) {
+	data := struct {
+		Appkey    string `json:"appkey"`
+		Timestamp int64  `json:"timestamp"`
+		TaskId    string `json:"task_id"`
+	}{
+		Appkey:    u.Appkey,
+		Timestamp: time.Now().Unix(),
+		TaskId:    taskId,
+	}
+	return u.Request(Host+ChanDataPath, data)
+}
+
+func (u *Client) QuotaQuery() ([]byte, error) {
+	data := struct {
+		Appkey    string `json:"appkey"`
+		Timestamp int64  `json:"timestamp"`
+	}{
+		Appkey:    u.Appkey,
+		Timestamp: time.Now().Unix(),
+	}
+	return u.Request(Host+QuotaQueryPath, data)
+}
