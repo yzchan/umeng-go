@@ -29,20 +29,21 @@ const (
 	TagDeletePath string = "/api/tag/delete"
 	TagClearPath  string = "/api/tag/clear"
 
-	TmplAddPath    string = "/api/template/add"
-	TmplDeletePath string = "/api/template/delete"
-	TmplGetPath    string = "/api/template/get"
-	TmplListPath   string = "/api/template/list"
-	TmplSendPath   string = "/api/template/send"
-	TmplMsgPath    string = "/api/template/msg"
+	//TmplAddPath    string = "/api/template/add"
+	//TmplDeletePath string = "/api/template/delete"
+	//TmplGetPath    string = "/api/template/get"
+	//TmplListPath   string = "/api/template/list"
+	//TmplSendPath   string = "/api/template/send"
+	//TmplMsgPath    string = "/api/template/msg"
 
-	PlatformAndroid int = 1
-	PlatformIOS     int = 0
+	IOS     int = 0
+	Android int = 1
 )
 
 type Client struct {
 	Appkey       string
 	MasterSecret string
+	PackageName  string
 	Platform     int
 }
 
@@ -53,8 +54,8 @@ type Umeng struct {
 
 func NewUmeng() *Umeng {
 	return &Umeng{
-		Android: Client{Platform: PlatformAndroid},
-		IOS:     Client{Platform: PlatformIOS},
+		Android: Client{Platform: Android},
+		IOS:     Client{Platform: IOS},
 	}
 }
 
@@ -63,6 +64,12 @@ func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
 	u.Android.MasterSecret = secret
 	return u
 }
+
+func (u *Umeng) SetPackageName(name string) *Umeng {
+	u.Android.PackageName = name
+	return u
+}
+
 func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
 	u.IOS.Appkey = appkey
 	u.IOS.MasterSecret = secret
@@ -81,11 +88,6 @@ func (u *Client) PreView(cast notification.Caster) {
 		fmt.Println(string(encoded))
 	}
 	fmt.Printf("===============[%s]===============\n", t.String())
-}
-
-// Check 检测消息是否合法
-func (u *Client) Check(cast notification.Caster) {
-	// TODO
 }
 
 // Send 发送消息
