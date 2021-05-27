@@ -18,8 +18,8 @@ const (
 	HttpsHost      string = "https://msgapi.umeng.com"
 	SendPath       string = "/api/send"
 	StatusPath     string = "/api/status"
-	ChanDataPath   string = "/api/channel/data"
-	QuotaQueryPath string = "/api/quota/query"
+	ChannelPath   string = "/api/channel/data"
+	QuotaPath string = "/api/quota/query"
 	CancelPath     string = "/api/cancel"
 	UploadPath     string = "/upload"
 
@@ -91,58 +91,56 @@ func (u *Client) PreView(cast notification.Caster) {
 }
 
 // Send 发送消息
-func (u *Client) Send(cast notification.Caster) ([]byte, error) {
+func (u *Client) Send(cast notification.Caster) (string, error) {
+	var (
+		buf []byte
+		err error
+	)
 	cast.SetAppkey(u.Appkey)
-	result, err := u.Request(Host+SendPath, cast)
-	if err != nil {
-		return nil, err
+	if buf, err = u.Request(Host+SendPath, cast); err != nil {
+		return "", err
 	}
-	return result, nil
-}
 
-type FailResp struct {
-	Ret  string     `json:"ret"`
-	Data UmengError `json:"data"`
-}
-
-type UmengError struct {
-	Code string `json:"error_code"`
-	Msg  string `json:"error_msg"`
-}
-
-func (e *UmengError) Error() string {
-	return fmt.Sprintf("Umeng Resonse Error:[%s]%s", e.Code, e.Msg)
-}
-
-func (u *Client) Request(url string, reqBody interface{}) ([]byte, error) {
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, err
+	var r struct {
+		Ret  string `json:"ret"`
+		Data struct {
+			MsgId  string `json:"msg_id"`
+			TaskId string `json:"task_id"`
+		} `json:"data"`
 	}
+	if err = json.Unmarshal(buf, &r); err != nil {
+		return "", err
+	}
+
+	return r.Data.MsgId + r.Data.TaskId, nil
+}
+
+func (u *Client) Request(url string, reqBody interface{}) (content []byte, err error) {
+	var (
+		body []byte
+		resp *http.Response
+	)
+
+	if body, err = json.Marshal(reqBody); err != nil {
+		return
+	}
+
 	url = fmt.Sprintf("%s?sign=%s", url, u.Sign(url, string(body)))
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return nil, err
+	if resp, err = http.Post(url, "application/json", bytes.NewBuffer(body)); err != nil {
+		return
 	}
 	defer resp.Body.Close()
-	var content []byte
-	content, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
+
+	if content, err = ioutil.ReadAll(resp.Body); err != nil {
+		return
+	}
+
+	// 统一处理非200响应
+	if resp.StatusCode != 200 {
+		err = errors.New(fmt.Sprintf("response status:%d. response body:%s", resp.StatusCode, string(content)))
 		return nil, err
 	}
-	//fmt.Println(string(content))
-	// 统一处理请求失败
-	if resp.StatusCode == 400 {
-		var fail FailResp
-		err = json.Unmarshal(content, &fail)
-		if err != nil {
-			return nil, err
-		}
-		return nil, &fail.Data
-	} else if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("umeng response code:%d. %s", resp.StatusCode, content))
-	}
-	return content, nil
+	return
 }
 
 func (u *Client) Sign(url string, body string) string {

@@ -5,34 +5,27 @@ import (
 	"time"
 )
 
+type CancelReq struct {
+	Appkey    string `json:"appkey"`
+	Timestamp int64  `json:"timestamp"`
+	TaskId    string `json:"task_id"`
+}
+
 type CancelResp struct {
 	Ret  string `json:"ret"`
 	Data struct {
-		TaskId    string `json:"task_id"`
-		ErrorCode string `json:"error_code"`
-		ErrorMsg  string `json:"error_msg"`
+		TaskId string `json:"task_id"`
 	} `json:"data"`
 }
 
 func (u *Client) Cancel(taskId string) (ret CancelResp, err error) {
-
-	data := struct {
-		Appkey    string `json:"appkey"`
-		Timestamp int64  `json:"timestamp"`
-		TaskId    string `json:"task_id"`
-	}{
-		Appkey:    u.Appkey,
-		Timestamp: time.Now().Unix(),
-		TaskId:    taskId,
-	}
-
-	resp, err := u.Request(Host+CancelPath, data)
-	if err != nil {
+	var result []byte
+	data := CancelReq{u.Appkey, time.Now().Unix(), taskId}
+	if result, err = u.Request(Host+CancelPath, data); err != nil {
 		return
 	}
 
-	err = json.Unmarshal(resp, &ret)
-	if err != nil {
+	if err = json.Unmarshal(result, &ret); err != nil {
 		return
 	}
 	return

@@ -51,7 +51,7 @@ func (u *Client) ListTags(device string) (tags []string, err error) {
 	return strings.Split(v.Data.Data.Tags, ","), nil
 }
 
-// AddTags 添加标签
+// AddTags 给设备添加标签
 func (u *Client) AddTags(device string, tags []string) (err error) {
 	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
 	_, err = u.Request(Host+TagAddPath, data)
@@ -62,7 +62,7 @@ func (u *Client) AddTag(device string, tag string) (err error) {
 	return u.AddTags(device, []string{tag})
 }
 
-// SetTags 该方法会清掉原来设置的tag
+// SetTags 给设备重设标签，该方法会清掉原来设置的tag
 func (u *Client) SetTags(device string, tags []string) (err error) {
 	data := u.buildTagReq().setDeviceToken(device).setTags(tags)
 	_, err = u.Request(Host+TagSetPath, data)

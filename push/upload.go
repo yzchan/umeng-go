@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+type UploadReq struct {
+	Appkey    string `json:"appkey"`
+	Timestamp int64  `json:"timestamp"`
+	Content   string `json:"content"`
+}
+
 type UploadResp struct {
 	Ret  string `json:"ret"`
 	Data struct {
@@ -16,35 +22,24 @@ type UploadResp struct {
 }
 
 func (u *Client) UploadFile(file string) (fileId string, err error) {
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
+	var content []byte
+	if content, err = ioutil.ReadFile(file); err != nil {
 		return
 	}
 	return u.Upload(string(content))
 }
 
 func (u *Client) Upload(content string) (fileId string, err error) {
-
-	data := struct {
-		Appkey    string `json:"appkey"`
-		Timestamp int64  `json:"timestamp"`
-		Content   string `json:"content"`
-	}{
-		Appkey:    u.Appkey,
-		Timestamp: time.Now().Unix(),
-		Content:   content,
-	}
-
-	resp, err := u.Request(Host+UploadPath, data)
-	if err != nil {
+	var result []byte
+	data := UploadReq{u.Appkey, time.Now().Unix(), content}
+	if result, err = u.Request(Host+UploadPath, data); err != nil {
 		return
 	}
 
-	result := UploadResp{}
-	err = json.Unmarshal(resp, &result)
-	if err != nil {
+	r := UploadResp{}
+	if err = json.Unmarshal(result, &r); err != nil {
 		return
 	}
-	fileId = result.Data.FileId
+	fileId = r.Data.FileId
 	return
 }
