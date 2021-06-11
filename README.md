@@ -8,7 +8,7 @@
 
 - 友盟推送：消息的推送、任务查询、撤销推送、文件上传
 - 标签接口：标签的查询、新增、重设、删除、清除
-- 模板消息
+- 模板消息(TODO)
 - 安卓厂商数据透出和额度查询
 
 消息类型包括：单播(unicast)、列播(listcast)、广播(broadcast)、组播(groupcast)、文件播(filecast)、自定义播(customizedcast)
@@ -57,7 +57,7 @@ func main() {
 	cast.SetDescription("单播测试")
 	cast.Payload.Body.SetTitle("push title").SetText("push text")
 	cast.Payload.Extra.AddKV("extra1", "1").AddKV("extra2", "2")
-	cast.SetDeviceToken("{put your device-token}") // 设置推送目标的设备
+	cast.SetDeviceToken("{input your device-token}") // 设置推送目标的设备
 
 	//u.Android.PreView(cast) // 预览json格式的消息体
 	ret, err := u.Android.Send(cast)

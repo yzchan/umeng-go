@@ -18,12 +18,11 @@ type StatusResp struct {
 
 type StatusData struct {
 	TaskId       string `json:"task_id"`
-	OpenCount    int64  `json:"open_count"`
-	SentCount    int64  `json:"sent_count"`
-	DismissCount int64  `json:"dismiss_count"`
-	Status       int64  `json:"status"`
-	ErrorCode    int64  `json:"error_code"`
-	ErrorMsg     string `json:"error_msg"`
+	Status       int64  `json:"status"`        // 消息状态：0排队中 1发送中 2发送完成 3发送失败 4消息被撤销 5消息过期 6筛选结果为空 7定时任务尚未开始处理
+	OpenCount    int64  `json:"open_count"`    // android/ios共有：打开数
+	SentCount    int64  `json:"sent_count"`    // android/ios共有：消息收到数(android) APNs返回SUCCESS的设备数(ios)
+	DismissCount int64  `json:"dismiss_count"` // android特有：忽略数
+	TotalCount   int64  `json:"total_count"`   // ios特有：投递APNs设备数
 }
 
 func (u *Client) Status(taskId string) (ret StatusData, err error) {

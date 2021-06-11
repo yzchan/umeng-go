@@ -16,8 +16,6 @@ type UploadResp struct {
 	Ret  string `json:"ret"`
 	Data struct {
 		FileId    string `json:"file_id"`
-		ErrorCode string `json:"error_code"`
-		ErrorMsg  string `json:"error_msg"`
 	} `json:"data"`
 }
 
