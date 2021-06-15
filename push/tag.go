@@ -49,7 +49,7 @@ func (u *Client) ListTags(device string) (tags []string, err error) {
 		return
 	}
 	if v.Data.Data.Tags == "" {
-		return
+		return []string{}, nil
 	}
 	return strings.Split(v.Data.Data.Tags, ","), nil
 }
