@@ -12,11 +12,11 @@
 - 安卓厂商数据透出和额度查询
 
 消息类型包括：单播(unicast)、列播(listcast)、广播(broadcast)、组播(groupcast)、文件播(filecast)、自定义播(customizedcast)
-。其中自定义播又可以分为自定义文件播和自定义alias播。 这7种类型整体可以分为两大类：单播累消息和任务类消息。
+。其中自定义播又可以分为自定义文件播和自定义alias播。 这7种类型整体可以分为两大类：单播类消息和任务类消息。
 
 > unicast、listcast、customizedcast(不带file_id)统称为单播类消息，Web后台不会展示此类消息详细信息，仅展示前一天的汇总数据。单播类消息推送响应体中返回msg_id。
 
-> broadcast、filecast、groupcast、customizedcast(不带file_id)统称为任务类消息，任务类消息支持API查询、撤销操作，Web后台会展示任务类消息详细信息。任务类消息推送响应体中返回task_id。
+> broadcast、filecast、groupcast、customizedcast(带file_id)统称为任务类消息，任务类消息支持API查询、撤销操作，Web后台会展示任务类消息详细信息。任务类消息推送响应体中返回task_id。
 
 | 消息类别 | 消息类型 | 用户范围 | msg_id | task_id | API支持 |
 | ------ | ------ | ------ | ------ | ------ | ------ |
