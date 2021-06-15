@@ -48,6 +48,9 @@ func (u *Client) ListTags(device string) (tags []string, err error) {
 	if err != nil {
 		return
 	}
+	if v.Data.Data.Tags == "" {
+		return
+	}
 	return strings.Split(v.Data.Data.Tags, ","), nil
 }
 
