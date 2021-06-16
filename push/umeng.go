@@ -136,8 +136,11 @@ func (u *Client) Request(url string, reqBody interface{}) (content []byte, err e
 
 	// 统一处理非200响应
 	if resp.StatusCode != 200 {
-		err = errors.New(fmt.Sprintf("response status:%d. response body:%s", resp.StatusCode, string(content)))
-		return nil, err
+		var errResp UmengErrorResp
+		if err = json.Unmarshal(content, &errResp); err != nil {
+			return nil, errors.New(fmt.Sprintf("[%d]:%s", resp.StatusCode, string(content)))
+		}
+		return nil, errResp.Data
 	}
 	return
 }
