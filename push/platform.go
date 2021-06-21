@@ -78,12 +78,10 @@ func (p *Platform) Request(url string, reqBody interface{}) (content []byte, err
 	if content, err = ioutil.ReadAll(resp.Body); err != nil {
 		return
 	}
-
 	// 统一处理非200响应
 	if resp.StatusCode != 200 {
 		var errResp UmengErrorResp
 		if err = json.Unmarshal(content, &errResp); err != nil {
-			fmt.Println(err)
 			return nil, errors.New(fmt.Sprintf("[%d]:%s", resp.StatusCode, string(content)))
 		}
 		return nil, errResp.Data
