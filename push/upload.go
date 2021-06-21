@@ -19,18 +19,18 @@ type UploadResp struct {
 	} `json:"data"`
 }
 
-func (u *Client) UploadFile(file string) (fileId string, err error) {
+func (p *Platform) UploadFile(file string) (fileId string, err error) {
 	var content []byte
 	if content, err = ioutil.ReadFile(file); err != nil {
 		return
 	}
-	return u.Upload(string(content))
+	return p.Upload(string(content))
 }
 
-func (u *Client) Upload(content string) (fileId string, err error) {
+func (p *Platform) Upload(content string) (fileId string, err error) {
 	var result []byte
-	data := UploadReq{u.Appkey, time.Now().Unix(), content}
-	if result, err = u.Request(Host+UploadPath, data); err != nil {
+	data := UploadReq{p.Appkey, time.Now().Unix(), content}
+	if result, err = p.Request(Host+UploadPath, data); err != nil {
 		return
 	}
 

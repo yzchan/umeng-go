@@ -1,15 +1,17 @@
 package push
 
+import "fmt"
+
 type UmengError struct {
-	ErrorCode string `json:"error_code"`
+	ErrorCode int    `json:"error_code"`
 	ErrorMsg  string `json:"error_msg"`
 }
 
 func (e *UmengError) Error() string {
-	return e.ErrorMsg
+	return fmt.Sprintf("Umeng ErrCode=%d ErrMsg=%s", e.ErrorCode, e.ErrorMsg)
 }
 
-func NewUmengError(code string, msg string) error {
+func NewUmengError(code int, msg string) error {
 	return &UmengError{
 		ErrorCode: code,
 		ErrorMsg:  msg,

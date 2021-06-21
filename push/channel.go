@@ -26,10 +26,10 @@ type ChannelData struct {
 	} `json:"stats"`
 }
 
-func (u *Client) Channel(taskId string) (ret ChannelData, err error) {
+func (p *Platform) Channel(taskId string) (ret ChannelData, err error) {
 	var result []byte
-	data := ChannelReq{u.Appkey, time.Now().Unix(), taskId}
-	if result, err = u.Request(Host+ChannelPath, data); err != nil {
+	data := ChannelReq{p.Appkey, time.Now().Unix(), taskId}
+	if result, err = p.Request(Host+ChannelPath, data); err != nil {
 		return
 	}
 	var c ChannelResp

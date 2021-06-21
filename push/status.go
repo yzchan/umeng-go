@@ -25,10 +25,10 @@ type StatusData struct {
 	TotalCount   int64  `json:"total_count"`   // ios特有：投递APNs设备数
 }
 
-func (u *Client) Status(taskId string) (ret StatusData, err error) {
+func (p *Platform) Status(taskId string) (ret StatusData, err error) {
 	var result []byte
-	data := StatusReq{u.Appkey, time.Now().Unix(), taskId}
-	if result, err = u.Request(Host+StatusPath, data); err != nil {
+	data := StatusReq{p.Appkey, time.Now().Unix(), taskId}
+	if result, err = p.Request(Host+StatusPath, data); err != nil {
 		return
 	}
 	var s StatusResp
