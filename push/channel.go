@@ -16,13 +16,19 @@ type ChannelResp struct {
 	Data ChannelData `json:"data"`
 }
 
+type ChannelErr struct {
+	ErrorCode string `json:"error_code"`
+	ErrorInfo string `json:"error_info"`
+	Num       string `json:"num"`
+}
+
 type ChannelData struct {
 	Stats []struct {
-		Channel            string        `json:"channel"`
-		ChannelArriveCount int           `json:"channel_arrive_count"`
-		ChannelClick       int           `json:"channel_click"`
-		ChannelSentCount   int           `json:"channel_sent_count"`
-		Errors             []interface{} `json:"errors"`
+		Channel            string       `json:"channel"`
+		ChannelArriveCount int          `json:"channel_arrive_count"`
+		ChannelClick       int          `json:"channel_click"`
+		ChannelSentCount   int          `json:"channel_sent_count"`
+		Errors             []ChannelErr `json:"errors"`
 	} `json:"stats"`
 }
 
