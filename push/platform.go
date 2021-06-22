@@ -18,6 +18,11 @@ type Platform struct {
 	MasterSecret string
 	PackageName  string
 	Platform     string
+	Debug        bool
+}
+
+func (p *Platform) SetDebugMode() {
+	p.Debug = true
 }
 
 // PreView 预览推送消息体
@@ -69,6 +74,10 @@ func (p *Platform) Request(url string, reqBody interface{}) (content []byte, err
 		return
 	}
 
+	if p.Debug {
+		fmt.Printf("\n%s\n", string(body))
+	}
+
 	url = fmt.Sprintf("%s?sign=%s", url, p.Sign(url, string(body)))
 	if resp, err = http.Post(url, "application/json", bytes.NewBuffer(body)); err != nil {
 		return
@@ -77,6 +86,9 @@ func (p *Platform) Request(url string, reqBody interface{}) (content []byte, err
 
 	if content, err = ioutil.ReadAll(resp.Body); err != nil {
 		return
+	}
+	if p.Debug {
+		fmt.Printf("\n%s\n", string(content))
 	}
 	// 统一处理非200响应
 	if resp.StatusCode != 200 {
