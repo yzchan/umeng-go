@@ -32,6 +32,7 @@ type APNs struct {
 	Sound            string `json:"sound"`                       // 可选
 	ContentAvailable int    `json:"content-available,omitempty"` // 可选，代表静默推送
 	Category         string `json:"category,omitempty"`          // 可选，注意: ios8才支持该字段
+	QFAttach         string `json:"QFAttach,omitempty"`          // 可选，兼容内部业务，非友盟官方字段
 }
 
 func (a *APNs) SetAlert(title string, subTitle string, body string) *APNs {
@@ -60,5 +61,10 @@ func (a *APNs) SetContentAvailable(val int) *APNs {
 
 func (a *APNs) SetCategory(category string) *APNs {
 	a.Category = category
+	return a
+}
+
+func (a *APNs) SetImg(img string) *APNs {
+	a.QFAttach = img
 	return a
 }
