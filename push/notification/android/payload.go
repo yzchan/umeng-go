@@ -44,6 +44,7 @@ func (e *Extra) AddKV(key string, val string) *Extra {
 type Body struct { // 必填，消息体
 	Title       string `json:"title"`                  // 必填，通知标题
 	Text        string `json:"text"`                   // 必填，通知文字描述
+	Ticker      string `json:"ticker,omitempty"`       // 必填，提示文字
 	Icon        string `json:"icon,omitempty"`         // 可选，状态栏图标ID，R.drawable.[smallIcon]，如果没有，默认使用应用图标
 	LargeIcon   string `json:"largeIcon,omitempty"`    // 可选，通知栏拉开后左侧图标ID，R.drawable.[largeIcon]
 	Img         string `json:"img,omitempty"`          // 可选，通知栏大图标的URL链接。该字段的优先级大于largeIcon 只支持华为，链接需要以https开头
@@ -59,13 +60,16 @@ type Body struct { // 必填，消息体
 	Custom      string `json:"custom,omitempty"`       // 配合after_open=go_custom时使用。或配合display_type=message时使用
 }
 
-// SetTitle 设置通知标题
 func (b *Body) SetTitle(title string) *Body {
 	b.Title = title
 	return b
 }
 
-// SetText 设置通知文字描述
+func (b *Body) SetTicker(ticker string) *Body {
+	b.Ticker = ticker
+	return b
+}
+
 func (b *Body) SetText(text string) *Body {
 	b.Text = text
 	return b
