@@ -3,7 +3,6 @@ package android
 import (
 	"github.com/yzchan/umeng-go/push/notification"
 	"strings"
-	"time"
 )
 
 type Listcast struct {
@@ -19,7 +18,6 @@ func NewListcast() *Listcast {
 	cast := &Listcast{}
 	cast.Type = "listcast"
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 
@@ -29,4 +27,9 @@ func (l *Listcast) SetDeviceTokens(tokens []string) *Listcast {
 	}
 	l.DeviceTokens = strings.Join(tokens, ",")
 	return l
+}
+
+func (l *Listcast) Send() (string, error) {
+	l.SetPackageName(l.App.PackageName)
+	return l.BaseSend(l)
 }

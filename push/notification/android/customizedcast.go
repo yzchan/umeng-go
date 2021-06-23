@@ -2,7 +2,6 @@ package android
 
 import (
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Customizedcast struct {
@@ -20,7 +19,6 @@ func NewCustomizedcast() *Customizedcast {
 	cast := &Customizedcast{}
 	cast.Type = "customizedcast"
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 
@@ -49,4 +47,9 @@ func (c *Customizedcast) SetAsTemplate(name string) {
 	c.TemplateName = name
 	c.Alias = "${alias}"
 	c.FileId = ""
+}
+
+func (c *Customizedcast) Send() (string, error) {
+	c.SetPackageName(c.App.PackageName)
+	return c.BaseSend(c)
 }

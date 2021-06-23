@@ -43,6 +43,7 @@ func main() {
 	u := push.NewUmeng()
 	u.InitAndroid("*****", "*****").SetPackageName("com.***.forum")
 	u.InitIOS("*****", "*****")
+	u.Debug() // 调试模式会输出http请求和响应内容
 
 	// 查询推送任务结果
 	ret1, err := u.Android.Status("us*****")
@@ -58,13 +59,8 @@ func main() {
 	cast.Payload.Body.SetTitle("push title").SetText("push text")
 	cast.Payload.Extra.AddKV("extra1", "1").AddKV("extra2", "2")
 	cast.SetDeviceToken("{input your device-token}") // 设置推送目标的设备
-
-	//u.Android.PreView(cast) // 预览json格式的消息体
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(string(ret))
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 ```
 

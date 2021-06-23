@@ -1,6 +1,8 @@
 package push
 
-import "strings"
+import (
+	"strings"
+)
 
 const (
 	Host        string = "http://msg.umeng.com" // https://msgapi.umeng.com
@@ -28,40 +30,49 @@ const (
 	Android string = "android"
 )
 
+var (
+	Debug       bool
+	PrettyJson  bool
+)
+
 type Umeng struct {
-	Android Platform
-	IOS     Platform
+	Android *App
+	IOS     *App
 }
 
 func NewUmeng() *Umeng {
 	return &Umeng{
-		Android: Platform{Platform: Android},
-		IOS:     Platform{Platform: IOS},
+		Android: &App{Platform: Android},
+		IOS:     &App{Platform: IOS},
 	}
 }
 
-func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
-	u.Android.Appkey = appkey
-	u.Android.MasterSecret = secret
+func (u *Umeng) Debug() *Umeng {
+	Debug = true
 	return u
 }
 
-func (u *Umeng) SetPackageName(name string) *Umeng {
-	u.Android.PackageName = name
+func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
+	u.Android.AppKey = appkey
+	u.Android.MasterSecret = secret
+	return u
+}
+func (u *Umeng) SetPackageName(packageName string) *Umeng {
+	u.Android.PackageName = packageName
 	return u
 }
 
 func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
-	u.IOS.Appkey = appkey
+	u.IOS.AppKey = appkey
 	u.IOS.MasterSecret = secret
 	return u
 }
 
-func (u *Umeng) GetPlatform(platform string) *Platform {
+func (u *Umeng) GetApp(platform string) *App {
 	if strings.ToLower(platform) == IOS {
-		return &u.IOS
+		return u.IOS
 	} else if strings.ToLower(platform) == Android {
-		return &u.Android
+		return u.Android
 	}
-	return &Platform{}
+	return &App{}
 }

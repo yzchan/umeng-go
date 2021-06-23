@@ -18,10 +18,10 @@ type CancelResp struct {
 	} `json:"data"`
 }
 
-func (p *Platform) Cancel(taskId string) (ret CancelResp, err error) {
+func (a *App) Cancel(taskId string) (ret CancelResp, err error) {
 	var result []byte
-	data := CancelReq{p.Appkey, time.Now().Unix(), taskId}
-	if result, err = p.Request(Host+CancelPath, data); err != nil {
+	data := CancelReq{a.AppKey, time.Now().Unix(), taskId}
+	if result, err = a.Request(Host+CancelPath, data); err != nil {
 		return
 	}
 

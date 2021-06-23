@@ -2,7 +2,6 @@ package android
 
 import (
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Broadcast struct {
@@ -16,6 +15,10 @@ func NewBroadcast() *Broadcast {
 	cast := &Broadcast{}
 	cast.Type = "broadcast"
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
+}
+
+func (b *Broadcast) Send() (string, error) {
+	b.SetPackageName(b.App.PackageName)
+	return b.BaseSend(b)
 }

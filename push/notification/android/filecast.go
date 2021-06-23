@@ -2,7 +2,6 @@ package android
 
 import (
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Filecast struct {
@@ -17,11 +16,15 @@ func NewFilecast() *Filecast {
 	cast := &Filecast{}
 	cast.Type = "filecast"
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 
 func (f *Filecast) SetFileId(fileId string) *Filecast {
 	f.FileId = fileId
 	return f
+}
+
+func (f *Filecast) Send() (string, error) {
+	f.SetPackageName(f.App.PackageName)
+	return f.BaseSend(f)
 }

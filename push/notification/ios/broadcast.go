@@ -19,3 +19,7 @@ func NewBroadcast() *Broadcast {
 	cast.Timestamp = time.Now().Unix()
 	return cast
 }
+
+func (b *Broadcast) Send() (string, error) {
+	return b.BaseSend(b)
+}

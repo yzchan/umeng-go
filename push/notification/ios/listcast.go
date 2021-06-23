@@ -29,3 +29,7 @@ func (l *Listcast) SetDeviceTokens(tokens []string) *Listcast {
 	l.DeviceTokens = strings.Join(tokens, ",")
 	return l
 }
+
+func (l *Listcast) Send() (string, error) {
+	return l.BaseSend(l)
+}

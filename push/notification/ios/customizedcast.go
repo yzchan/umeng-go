@@ -50,3 +50,7 @@ func (c *Customizedcast) SetAsTemplate(name string) {
 	c.Alias = "${alias}"
 	c.FileId = ""
 }
+
+func (c *Customizedcast) Send() (string, error) {
+	return c.BaseSend(c)
+}

@@ -21,7 +21,6 @@ func init() {
 	u = push.NewUmeng().
 		InitAndroid("aaa", "bbb").SetPackageName(packageName).
 		InitIOS("ccc", "ddd")
-
 }
 
 func SendIOSUnicast() {
@@ -30,13 +29,8 @@ func SendIOSUnicast() {
 	cast.Payload.GetAPNs().SetAlert("单播测试-title", "单播测试-subtitle", "单播测试-body")
 	cast.Payload.AddExtra("show_alert", "1").AddExtra("type", "2")
 	cast.SetDeviceToken(iosToken1)
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendIOSListcast() {
@@ -45,13 +39,8 @@ func SendIOSListcast() {
 	cast.Payload.GetAPNs().SetAlert("列播测试-title", "列播测试-subtitle", "列播测试-body")
 	cast.Payload.AddExtra("show_alert", "1").AddExtra("type", "2")
 	cast.SetDeviceTokens([]string{iosToken1, iosToken2})
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendIOSBroadcast() {
@@ -59,13 +48,8 @@ func SendIOSBroadcast() {
 	cast.SetDescription("广播测试")
 	cast.Payload.GetAPNs().SetAlert("广播测试-title", "广播测试-subtitle", "广播测试-body")
 	cast.Payload.AddExtra("show_alert", "1").AddExtra("type", "2")
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendIOSGroupcast() {
@@ -79,17 +63,12 @@ func SendIOSGroupcast() {
 	"and": [{"tag": "group-1"}]
 	}
 	}`)
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendIOSFilecast() {
-	//fileId, err := u.IOS.Upload(iosToken1)
+	//fileId, err := cast.Upload(iosToken1)
 	//if err != nil {
 	//	panic(err)
 	//}
@@ -101,13 +80,8 @@ func SendIOSFilecast() {
 	cast.Payload.GetAPNs().SetAlert("文件播测试-title", "文件播测试-subtitle", "文件播测试-body")
 	cast.Payload.AddExtra("show_alert", "1").AddExtra("type", "2")
 	cast.SetFileId(fileId)
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendIOSCustomizedcast() {
@@ -117,66 +91,42 @@ func SendIOSCustomizedcast() {
 	cast.Payload.AddExtra("show_alert", "1").AddExtra("type", "2")
 	cast.SetAliasType("AliasType")
 	cast.SetAlias("1234")
-
-	u.IOS.PreView(cast)
-	ret, err := u.IOS.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.IOS)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidUnicast() {
 	cast := android.NewUnicast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("单播测试")
 	cast.Payload.Body.SetTitle("单播测试-title").SetText("单播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
 	cast.SetDeviceToken(androidToken1)
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidListcast() {
 	cast := android.NewListcast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("列播测试")
 	cast.Payload.Body.SetTitle("列播测试-title").SetText("列播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
 	cast.SetDeviceTokens([]string{androidToken1, androidToken2})
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidBroadcast() {
 	cast := android.NewBroadcast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("广播测试")
 	cast.Payload.Body.SetTitle("广播测试-title").SetText("广播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
 	//cast.Policy.SetStartTime(time.Unix(time.Now().Unix()+3600, 0)) // 延后一小时
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidGroupcast() {
 	cast := android.NewGroupcast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("组播测试")
 	cast.Payload.Body.SetTitle("组播测试-title").SetText("组播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
@@ -186,13 +136,8 @@ func SendAndroidGroupcast() {
 	"and": [{"tag": "group-1"}]
 	}
 	}`)
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidFilecast() {
@@ -204,33 +149,21 @@ func SendAndroidFilecast() {
 	fileId := "*****"
 
 	cast := android.NewFilecast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("文件播测试")
 	cast.Payload.Body.SetTitle("文件播测试-title").SetText("文件播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
 	cast.SetFileId(fileId)
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }
 
 func SendAndroidCustomizedcast() {
 	cast := android.NewCustomizedcast()
-	cast.SetPackageName(packageName)
 	cast.SetDescription("自定义播测试")
 	cast.Payload.Body.SetTitle("自定义播测试-title").SetText("自定义播测试-text")
 	cast.Payload.Extra.AddKV("show_alert", "1").AddKV("type", "2")
 	cast.SetAliasType("AliasType")
 	cast.SetAlias("4321")
-
-	u.Android.PreView(cast)
-	ret, err := u.Android.Send(cast)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(ret)
+	cast.BindApp(u.Android)
+	fmt.Println(cast.Send())
 }

@@ -16,8 +16,18 @@ func (p *Policy) SetStartTime(time time.Time) *Policy {
 	return p
 }
 
+func (p *Policy) SetStartTimeStr(time string) *Policy {
+	p.StartTime = time
+	return p
+}
+
 func (p *Policy) SetExpireTime(time time.Time) *Policy {
 	p.ExpireTime = time.Format(TimeFormat)
+	return p
+}
+
+func (p *Policy) SetExpireTimeStr(time string) *Policy {
+	p.ExpireTime = time
 	return p
 }
 

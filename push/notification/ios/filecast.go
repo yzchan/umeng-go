@@ -25,3 +25,7 @@ func (f *Filecast) SetFileId(fileId string) *Filecast {
 	f.FileId = fileId
 	return f
 }
+
+func (f *Filecast) Send() (string, error) {
+	return f.BaseSend(f)
+}

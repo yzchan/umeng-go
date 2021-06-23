@@ -25,7 +25,11 @@ func NewGroupcast() *Groupcast {
 
 func (g *Groupcast) SetFilter(condition string) *Groupcast {
 	var v interface{}
-	json.Unmarshal([]byte(condition), &v)
+	_ = json.Unmarshal([]byte(condition), &v)
 	g.Filter = v
 	return g
+}
+
+func (g *Groupcast) Send() (string, error) {
+	return g.BaseSend(g)
 }

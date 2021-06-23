@@ -10,7 +10,7 @@ type Unicast struct {
 	DeviceTokens string  `json:"device_tokens"`
 	Payload      Payload `json:"payload"`
 	Policy       Policy  `json:"policy,omitempty"`
-	TemplateName string `json:"template_name,omitempty"`
+	TemplateName string  `json:"template_name,omitempty"`
 }
 
 func NewUnicast() *Unicast {
@@ -28,6 +28,10 @@ func (u *Unicast) SetDeviceToken(token string) *Unicast {
 	}
 	u.DeviceTokens = token
 	return u
+}
+
+func (u *Unicast) Send() (string, error) {
+	return u.BaseSend(u)
 }
 
 func (u *Unicast) SetAsTemplate(name string) {

@@ -22,17 +22,17 @@ func (t *tagReq) setDeviceToken(device string) *tagReq {
 	return t
 }
 
-func (p *Platform) buildTagReq() (req *tagReq) {
+func (a *App) buildTagReq() (req *tagReq) {
 	req = new(tagReq)
-	req.Appkey = p.Appkey
+	req.Appkey = a.AppKey
 	req.Timestamp = time.Now().Unix()
 	return req
 }
 
 // ListTags 查询设备标签
-func (p *Platform) ListTags(device string) (tags []string, err error) {
-	data := p.buildTagReq().setDeviceToken(device)
-	result, err := p.Request(Host+TagListPath, data)
+func (a *App) ListTags(device string) (tags []string, err error) {
+	data := a.buildTagReq().setDeviceToken(device)
+	result, err := a.Request(Host+TagListPath, data)
 	if err != nil {
 		return
 	}
@@ -55,38 +55,38 @@ func (p *Platform) ListTags(device string) (tags []string, err error) {
 }
 
 // AddTags 给设备添加标签
-func (p *Platform) AddTags(device string, tags []string) (err error) {
-	data := p.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = p.Request(Host+TagAddPath, data)
+func (a *App) AddTags(device string, tags []string) (err error) {
+	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = a.Request(Host+TagAddPath, data)
 	return
 }
 
-func (p *Platform) AddTag(device string, tag string) (err error) {
-	return p.AddTags(device, []string{tag})
+func (a *App) AddTag(device string, tag string) (err error) {
+	return a.AddTags(device, []string{tag})
 }
 
 // SetTags 给设备重设标签，该方法会清掉原来设置的tag
-func (p *Platform) SetTags(device string, tags []string) (err error) {
-	data := p.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = p.Request(Host+TagSetPath, data)
+func (a *App) SetTags(device string, tags []string) (err error) {
+	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = a.Request(Host+TagSetPath, data)
 	return
 }
 
 // DeleteTags 删除设备标签
-func (p *Platform) DeleteTags(device string, tags []string) (err error) {
-	data := p.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = p.Request(Host+TagDeletePath, data)
+func (a *App) DeleteTags(device string, tags []string) (err error) {
+	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = a.Request(Host+TagDeletePath, data)
 	return
 }
 
 // DeleteTag 删除单个标签
-func (p *Platform) DeleteTag(device string, tag string) (err error) {
-	return p.DeleteTags(device, []string{tag})
+func (a *App) DeleteTag(device string, tag string) (err error) {
+	return a.DeleteTags(device, []string{tag})
 }
 
 // ClearTags 清除设备标签
-func (p *Platform) ClearTags(device string) (err error) {
-	data := p.buildTagReq().setDeviceToken(device)
-	_, err = p.Request(Host+TagClearPath, data)
+func (a *App) ClearTags(device string) (err error) {
+	data := a.buildTagReq().setDeviceToken(device)
+	_, err = a.Request(Host+TagClearPath, data)
 	return
 }
