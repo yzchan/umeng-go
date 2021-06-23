@@ -20,22 +20,26 @@ func (p *Payload) AddExtra(key string, val string) *Payload {
 	return p
 }
 
+type Alert struct {
+	Title    string `json:"title"`    // 标题
+	Subtitle string `json:"subtitle"` // 副标题
+	Body     string `json:"body"`     // 文本内容
+}
+
 type APNs struct {
-	Alert struct { // 当content-available=1时(静默推送)，可选; 否则必填
-		Title    string `json:"title"`    // 标题
-		Subtitle string `json:"subtitle"` // 副标题
-		Body     string `json:"body"`     // 文本内容
-	} `json:"alert"`
+	Alert            *Alert `json:"alert"`                       // 当content-available=1时(静默推送)，可选; 否则必填
 	Badge            string `json:"badge,omitempty"`             // 可选
-	Sound            string `json:"sound,omitempty"`             // 可选
+	Sound            string `json:"sound"`                       // 可选
 	ContentAvailable int    `json:"content-available,omitempty"` // 可选，代表静默推送
 	Category         string `json:"category,omitempty"`          // 可选，注意: ios8才支持该字段
 }
 
 func (a *APNs) SetAlert(title string, subTitle string, body string) *APNs {
-	a.Alert.Title = title
-	a.Alert.Subtitle = subTitle
-	a.Alert.Body = body
+	a.Alert = &Alert{
+		Title:    title,
+		Subtitle: subTitle,
+		Body:     body,
+	}
 	return a
 }
 
