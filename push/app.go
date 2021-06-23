@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -18,14 +19,7 @@ type App struct {
 	MasterSecret string
 	Platform     string
 	PackageName  string // 安卓包名
-}
-
-func (a *App) Marshal(data interface{}) ([]byte, error) {
-	if PrettyJson {
-		return json.MarshalIndent(data, "", "    ")
-	} else {
-		return json.Marshal(data)
-	}
+	Debug        bool
 }
 
 func (a *App) Request(url string, reqBody interface{}) (content []byte, err error) {
@@ -35,13 +29,19 @@ func (a *App) Request(url string, reqBody interface{}) (content []byte, err erro
 		req  *http.Request
 	)
 
-	if body, err = a.Marshal(reqBody); err != nil {
+	if a.Debug && strings.HasSuffix(url, SendPath) {
+		body, err = json.MarshalIndent(reqBody, "", "    ")
+	} else {
+		body, err = json.Marshal(reqBody)
+	}
+
+	if err != nil {
 		return
 	}
 
 	url = fmt.Sprintf("%s?sign=%s", url, a.Sign(url, string(body)))
 
-	if Debug {
+	if a.Debug {
 		log.Println("==========Umeng Request==========")
 		log.Printf("POST %s\n%s\n", url, string(body))
 	}
@@ -58,7 +58,7 @@ func (a *App) Request(url string, reqBody interface{}) (content []byte, err erro
 	if content, err = ioutil.ReadAll(resp.Body); err != nil {
 		return
 	}
-	if Debug {
+	if a.Debug {
 		log.Println("==========Umeng Response==========")
 		log.Printf("Http Code:%d\n%s\n", resp.StatusCode, string(content))
 	}

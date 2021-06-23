@@ -43,7 +43,7 @@ func main() {
 	u := push.NewUmeng()
 	u.InitAndroid("*****", "*****").SetPackageName("com.***.forum")
 	u.InitIOS("*****", "*****")
-	u.Debug() // 调试模式会输出http请求和响应内容
+	u.Debug(true) // 开启调试模式会输出http请求和响应内容
 
 	// 查询推送任务结果
 	ret1, err := u.Android.Status("us*****")

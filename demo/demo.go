@@ -21,6 +21,7 @@ func init() {
 	u = push.NewUmeng().
 		InitAndroid("aaa", "bbb").SetPackageName(packageName).
 		InitIOS("ccc", "ddd")
+	u.Debug(true)
 }
 
 func SendIOSUnicast() {

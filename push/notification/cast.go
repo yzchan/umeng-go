@@ -67,10 +67,6 @@ func (c *Cast) BaseSend(cast interface{}) (taskId string, err error) {
 	c.AppKey = c.App.AppKey
 	c.SetTimestamp()
 
-	push.PrettyJson = true
-	defer func() {
-		push.PrettyJson = false
-	}()
 	if buf, err = c.App.Request(push.Host+push.SendPath, cast); err != nil {
 		return
 	}

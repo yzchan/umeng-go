@@ -30,11 +30,6 @@ const (
 	Android string = "android"
 )
 
-var (
-	Debug       bool
-	PrettyJson  bool
-)
-
 type Umeng struct {
 	Android *App
 	IOS     *App
@@ -45,11 +40,6 @@ func NewUmeng() *Umeng {
 		Android: &App{Platform: Android},
 		IOS:     &App{Platform: IOS},
 	}
-}
-
-func (u *Umeng) Debug() *Umeng {
-	Debug = true
-	return u
 }
 
 func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
@@ -65,6 +55,12 @@ func (u *Umeng) SetPackageName(packageName string) *Umeng {
 func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
 	u.IOS.AppKey = appkey
 	u.IOS.MasterSecret = secret
+	return u
+}
+
+func (u *Umeng) Debug(debug bool) *Umeng {
+	u.Android.Debug = debug
+	u.IOS.Debug = debug
 	return u
 }
 
