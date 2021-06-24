@@ -19,12 +19,12 @@ const (
 	TagDeletePath string = "/api/tag/delete"
 	TagClearPath  string = "/api/tag/clear"
 
-	//TmplAddPath    string = "/api/template/add"
-	//TmplDeletePath string = "/api/template/delete"
-	//TmplGetPath    string = "/api/template/get"
-	//TmplListPath   string = "/api/template/list"
-	//TmplSendPath   string = "/api/template/send"
-	//TmplMsgPath    string = "/api/template/msg"
+	TmplAddPath    string = "/api/template/add"
+	TmplDeletePath string = "/api/template/delete"
+	TmplGetPath    string = "/api/template/get"
+	TmplListPath   string = "/api/template/list"
+	TmplSendPath   string = "/api/template/send"
+	TmplMsgPath    string = "/api/template/msg"
 
 	IOS     string = "ios"
 	Android string = "android"

@@ -44,12 +44,6 @@ func (cast *Customizedcast) SetFileId(fileId string) *Customizedcast {
 	return cast
 }
 
-func (cast *Customizedcast) SetAsTemplate(name string) {
-	cast.TemplateName = name
-	cast.Alias = "${alias}"
-	cast.FileId = ""
-}
-
 func (cast *Customizedcast) Send() (string, error) {
 	cast.SetPackageName(cast.App.PackageName)
 	return cast.BaseSend(cast)
@@ -58,4 +52,18 @@ func (cast *Customizedcast) Send() (string, error) {
 func (cast *Customizedcast) String() string {
 	marshaled, _ := json.MarshalIndent(cast, "", "    ")
 	return string(marshaled)
+}
+
+func (cast *Customizedcast) SetTemplateName(name string) {
+	cast.TemplateName = name
+}
+
+func (cast *Customizedcast) AddToTemplate(name string) (string, error) {
+	cast.SetAppKey(cast.App.AppKey)
+	cast.SetPackageName(cast.App.PackageName)
+	cast.SetAlias("${alias}")
+	cast.SetFileId("")
+	cast.SetTemplateName(name)
+	cast.SetTimestamp()
+	return cast.App.AddTemplate(cast)
 }

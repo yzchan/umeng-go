@@ -25,7 +25,7 @@ type CastResp struct {
 	} `json:"data"`
 }
 
-func (c *Cast) SetAppkey(key string) *Cast {
+func (c *Cast) SetAppKey(key string) *Cast {
 	c.AppKey = key
 	return c
 }

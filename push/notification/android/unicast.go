@@ -39,7 +39,15 @@ func (cast *Unicast) String() string {
 	return string(marshaled)
 }
 
-func (cast *Unicast) SetAsTemplate(name string) {
+func (cast *Unicast) SetTemplateName(name string) {
 	cast.TemplateName = name
-	cast.DeviceTokens = "${device_tokens}"
+}
+
+func (cast *Unicast) AddToTemplate(name string) (string, error) {
+	cast.SetAppKey(cast.App.AppKey)
+	cast.SetPackageName(cast.App.PackageName)
+	cast.SetDeviceToken("${device_tokens}")
+	cast.SetTemplateName(name)
+	cast.SetTimestamp()
+	return cast.App.AddTemplate(cast)
 }
