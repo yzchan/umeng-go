@@ -1,6 +1,7 @@
 package ios
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"time"
 )
@@ -24,33 +25,38 @@ func NewCustomizedcast() *Customizedcast {
 	return cast
 }
 
-func (c *Customizedcast) SetAliasType(aliasType string) *Customizedcast {
-	c.AliasType = aliasType
-	return c
+func (cast *Customizedcast) SetAliasType(aliasType string) *Customizedcast {
+	cast.AliasType = aliasType
+	return cast
 }
 
-func (c *Customizedcast) SetAlias(alias string) *Customizedcast {
-	if c.TemplateName != "" {
-		return c
+func (cast *Customizedcast) SetAlias(alias string) *Customizedcast {
+	if cast.TemplateName != "" {
+		return cast
 	}
-	c.Alias = alias
-	return c
+	cast.Alias = alias
+	return cast
 }
 
-func (c *Customizedcast) SetFileId(fileId string) *Customizedcast {
-	if c.TemplateName != "" {
-		return c
+func (cast *Customizedcast) SetFileId(fileId string) *Customizedcast {
+	if cast.TemplateName != "" {
+		return cast
 	}
-	c.FileId = fileId
-	return c
+	cast.FileId = fileId
+	return cast
 }
 
-func (c *Customizedcast) SetAsTemplate(name string) {
-	c.TemplateName = name
-	c.Alias = "${alias}"
-	c.FileId = ""
+func (cast *Customizedcast) SetAsTemplate(name string) {
+	cast.TemplateName = name
+	cast.Alias = "${alias}"
+	cast.FileId = ""
 }
 
-func (c *Customizedcast) Send() (string, error) {
-	return c.BaseSend(c)
+func (cast *Customizedcast) Send() (string, error) {
+	return cast.BaseSend(cast)
+}
+
+func (cast *Customizedcast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }

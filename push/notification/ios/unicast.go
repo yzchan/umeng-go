@@ -1,6 +1,7 @@
 package ios
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"time"
 )
@@ -22,19 +23,24 @@ func NewUnicast() *Unicast {
 	return cast
 }
 
-func (u *Unicast) SetDeviceToken(token string) *Unicast {
-	if u.TemplateName != "" { // 模板消息 禁止设置DeviceTokens
-		return u
+func (cast *Unicast) SetDeviceToken(token string) *Unicast {
+	if cast.TemplateName != "" { // 模板消息 禁止设置DeviceTokens
+		return cast
 	}
-	u.DeviceTokens = token
-	return u
+	cast.DeviceTokens = token
+	return cast
 }
 
-func (u *Unicast) Send() (string, error) {
-	return u.BaseSend(u)
+func (cast *Unicast) Send() (string, error) {
+	return cast.BaseSend(cast)
 }
 
-func (u *Unicast) SetAsTemplate(name string) {
-	u.TemplateName = name
-	u.DeviceTokens = "${device_tokens}"
+func (cast *Unicast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
+}
+
+func (cast *Unicast) SetAsTemplate(name string) {
+	cast.TemplateName = name
+	cast.DeviceTokens = "${device_tokens}"
 }

@@ -1,6 +1,7 @@
 package ios
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"time"
 )
@@ -20,6 +21,11 @@ func NewBroadcast() *Broadcast {
 	return cast
 }
 
-func (b *Broadcast) Send() (string, error) {
-	return b.BaseSend(b)
+func (cast *Broadcast) Send() (string, error) {
+	return cast.BaseSend(cast)
+}
+
+func (cast *Broadcast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }

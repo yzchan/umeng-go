@@ -1,6 +1,7 @@
 package ios
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"time"
 )
@@ -21,11 +22,16 @@ func NewFilecast() *Filecast {
 	return cast
 }
 
-func (f *Filecast) SetFileId(fileId string) *Filecast {
-	f.FileId = fileId
-	return f
+func (cast *Filecast) SetFileId(fileId string) *Filecast {
+	cast.FileId = fileId
+	return cast
 }
 
-func (f *Filecast) Send() (string, error) {
-	return f.BaseSend(f)
+func (cast *Filecast) Send() (string, error) {
+	return cast.BaseSend(cast)
+}
+
+func (cast *Filecast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }

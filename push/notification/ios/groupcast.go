@@ -23,13 +23,18 @@ func NewGroupcast() *Groupcast {
 	return cast
 }
 
-func (g *Groupcast) SetFilter(condition string) *Groupcast {
+func (cast *Groupcast) SetFilter(condition string) *Groupcast {
 	var v interface{}
 	_ = json.Unmarshal([]byte(condition), &v)
-	g.Filter = v
-	return g
+	cast.Filter = v
+	return cast
 }
 
-func (g *Groupcast) Send() (string, error) {
-	return g.BaseSend(g)
+func (cast *Groupcast) Send() (string, error) {
+	return cast.BaseSend(cast)
+}
+
+func (cast *Groupcast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }

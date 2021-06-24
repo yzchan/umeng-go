@@ -1,6 +1,7 @@
 package android
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"strings"
 )
@@ -21,15 +22,20 @@ func NewListcast() *Listcast {
 	return cast
 }
 
-func (l *Listcast) SetDeviceTokens(tokens []string) *Listcast {
+func (cast *Listcast) SetDeviceTokens(tokens []string) *Listcast {
 	if len(tokens) > 500 {
 		tokens = tokens[:500]
 	}
-	l.DeviceTokens = strings.Join(tokens, ",")
-	return l
+	cast.DeviceTokens = strings.Join(tokens, ",")
+	return cast
 }
 
-func (l *Listcast) Send() (string, error) {
-	l.SetPackageName(l.App.PackageName)
-	return l.BaseSend(l)
+func (cast *Listcast) Send() (string, error) {
+	cast.SetPackageName(cast.App.PackageName)
+	return cast.BaseSend(cast)
+}
+
+func (cast *Listcast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }

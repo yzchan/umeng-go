@@ -1,6 +1,7 @@
 package android
 
 import (
+	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 )
 
@@ -18,7 +19,12 @@ func NewBroadcast() *Broadcast {
 	return cast
 }
 
-func (b *Broadcast) Send() (string, error) {
-	b.SetPackageName(b.App.PackageName)
-	return b.BaseSend(b)
+func (cast *Broadcast) Send() (string, error) {
+	cast.SetPackageName(cast.App.PackageName)
+	return cast.BaseSend(cast)
+}
+
+func (cast *Broadcast) String() string {
+	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	return string(marshaled)
 }
