@@ -133,10 +133,53 @@ func (a *App) GetTemplateCount() int {
 	return ret.Total
 }
 
+type SendTemplateMsgReq struct {
+	Appkey     string        `json:"appkey"`
+	Timestamp  int64         `json:"timestamp"`
+	TemplateId string        `json:"template_id"`
+	ParamsData []interface{} `json:"params_data"`
+}
+
+type SendTemplateMsgResp struct {
+	Ret  string `json:"ret"`
+	Data struct {
+		TemplateMsgId string `json:"template_msg_id"`
+	} `json:"data"`
+}
+
+func (a *App) SendTemplateMsg(templateId string, data []interface{}) (templateMsgId string, err error) {
+	payload := SendTemplateMsgReq{
+		Appkey:     a.AppKey,
+		Timestamp:  time.Now().Unix(),
+		TemplateId: templateId,
+		ParamsData: data,
+	}
+
+	var buf []byte
+	if buf, err = a.Request(Host+TmplSendPath, payload); err != nil {
+		return
+	}
+
+	var r SendTemplateMsgResp
+	if err = json.Unmarshal(buf, &r); err != nil {
+		return
+	}
+
+	return r.Data.TemplateMsgId, nil
+}
+
+type MsgReq struct {
+	Appkey        string `json:"appkey"`
+	Timestamp     int64  `json:"timestamp"`
+	TemplateMsgId string `json:"template_msg_id"`
+	StartKey      string `json:"start_key,omitempty"`
+	Len           int    `json:"len"`
+}
+
 type MsgResp struct {
 	Ret  string `json:"ret"`
 	Data struct {
-		List Msg `json:"list"`
+		List []Msg `json:"list"`
 	} `json:"data"`
 }
 
@@ -149,10 +192,29 @@ type Msg struct {
 	TemplateMsgId string `json:"templateMsgId"`
 }
 
-func (a *App) SendTemplateMsg(templateId string, data interface{}) (templateMsgId string, err error) {
-	return
-}
+func (a *App) GetMsg(templateMsgId string, limit int, cursor string) (ret []Msg, last string, err error) {
+	payload := MsgReq{
+		Appkey:        a.AppKey,
+		Timestamp:     time.Now().Unix(),
+		TemplateMsgId: templateMsgId,
+		Len:           limit,
+		StartKey:      cursor,
+	}
 
-func (a *App) GetMsg(templateMsgId string) (ret []Msg, err error) {
-	return
+	var buf []byte
+	if buf, err = a.Request(Host+TmplMsgPath, payload); err != nil {
+		return
+	}
+
+	var r MsgResp
+	if err = json.Unmarshal(buf, &r); err != nil {
+		return
+	}
+
+	if len(r.Data.List) > 0 {
+		lastMsg := r.Data.List[len(r.Data.List)-1]
+		last = lastMsg.MsgId
+	}
+
+	return r.Data.List, last, nil
 }
