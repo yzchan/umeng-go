@@ -29,7 +29,6 @@ func (a *App) buildTagReq() (req *tagReq) {
 	return req
 }
 
-// ListTags 查询设备标签
 func (a *App) ListTags(device string) (tags []string, err error) {
 	data := a.buildTagReq().setDeviceToken(device)
 	result, err := a.Request(Host+TagListPath, data)
@@ -54,7 +53,6 @@ func (a *App) ListTags(device string) (tags []string, err error) {
 	return strings.Split(v.Data.Data.Tags, ","), nil
 }
 
-// AddTags 给设备添加标签
 func (a *App) AddTags(device string, tags []string) (err error) {
 	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
 	_, err = a.Request(Host+TagAddPath, data)
@@ -65,26 +63,22 @@ func (a *App) AddTag(device string, tag string) (err error) {
 	return a.AddTags(device, []string{tag})
 }
 
-// SetTags 给设备重设标签，该方法会清掉原来设置的tag
 func (a *App) SetTags(device string, tags []string) (err error) {
 	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
 	_, err = a.Request(Host+TagSetPath, data)
 	return
 }
 
-// DeleteTags 删除设备标签
 func (a *App) DeleteTags(device string, tags []string) (err error) {
 	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
 	_, err = a.Request(Host+TagDeletePath, data)
 	return
 }
 
-// DeleteTag 删除单个标签
 func (a *App) DeleteTag(device string, tag string) (err error) {
 	return a.DeleteTags(device, []string{tag})
 }
 
-// ClearTags 清除设备标签
 func (a *App) ClearTags(device string) (err error) {
 	data := a.buildTagReq().setDeviceToken(device)
 	_, err = a.Request(Host+TagClearPath, data)

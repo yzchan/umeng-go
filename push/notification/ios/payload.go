@@ -21,18 +21,18 @@ func (p *Payload) AddExtra(key string, val string) *Payload {
 }
 
 type Alert struct {
-	Title    string `json:"title"`    // 标题
-	Subtitle string `json:"subtitle"` // 副标题
-	Body     string `json:"body"`     // 文本内容
+	Title    string `json:"title"`
+	Subtitle string `json:"subtitle"`
+	Body     string `json:"body"`
 }
 
 type APNs struct {
-	Alert            *Alert `json:"alert"`                       // 当content-available=1时(静默推送)，可选; 否则必填
-	Badge            string `json:"badge,omitempty"`             // 可选
-	Sound            string `json:"sound"`                       // 可选
-	ContentAvailable int    `json:"content-available,omitempty"` // 可选，代表静默推送
-	Category         string `json:"category,omitempty"`          // 可选，注意: ios8才支持该字段
-	QFAttach         string `json:"QFAttach,omitempty"`          // 可选，兼容内部业务，非友盟官方字段
+	Alert            *Alert `json:"alert"`
+	Badge            string `json:"badge,omitempty"`
+	Sound            string `json:"sound"`
+	ContentAvailable int    `json:"content-available,omitempty"`
+	Category         string `json:"category,omitempty"`
+	QFAttach         string `json:"QFAttach,omitempty"`
 }
 
 func (a *APNs) SetAlert(title string, subTitle string, body string) *APNs {
