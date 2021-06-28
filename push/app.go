@@ -18,7 +18,7 @@ type App struct {
 	AppKey       string
 	MasterSecret string
 	Platform     string
-	PackageName  string // 安卓包名
+	PackageName  string // 包名（安卓离线推送需要）
 	Debug        bool
 }
 

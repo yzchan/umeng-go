@@ -9,6 +9,7 @@ type Broadcast struct {
 	notification.Cast
 	Payload Payload `json:"payload"`
 	Policy  Policy  `json:"policy,omitempty"`
+	Channel Channel `json:"channel_properties,omitempty"`
 	MiPush
 }
 
@@ -20,11 +21,11 @@ func NewBroadcast() *Broadcast {
 }
 
 func (cast *Broadcast) Send() (string, error) {
-	cast.SetPackageName(cast.App.PackageName)
+	cast.Channel.SetChannelActivity(cast.App.PackageName)
 	return cast.BaseSend(cast)
 }
 
 func (cast *Broadcast) String() string {
-	marshaled, _ := json.MarshalIndent(cast, "", "    ")
+	marshaled, _ := json.Marshal(cast)
 	return string(marshaled)
 }

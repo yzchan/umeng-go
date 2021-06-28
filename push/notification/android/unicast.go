@@ -10,8 +10,9 @@ type Unicast struct {
 	DeviceTokens string  `json:"device_tokens"`
 	Payload      Payload `json:"payload"`
 	Policy       Policy  `json:"policy,omitempty"`
+	Channel      Channel `json:"channel_properties,omitempty"`
+	TemplateName string  `json:"template_name,omitempty"`
 	MiPush
-	TemplateName string `json:"template_name,omitempty"`
 }
 
 func NewUnicast() *Unicast {
@@ -30,7 +31,7 @@ func (cast *Unicast) SetDeviceToken(token string) *Unicast {
 }
 
 func (cast *Unicast) Send() (string, error) {
-	cast.SetPackageName(cast.App.PackageName)
+	cast.Channel.SetChannelActivity(cast.App.PackageName)
 	return cast.BaseSend(cast)
 }
 
@@ -45,7 +46,7 @@ func (cast *Unicast) SetTemplateName(name string) {
 
 func (cast *Unicast) AddToTemplate(name string) (string, error) {
 	cast.SetAppKey(cast.App.AppKey)
-	cast.SetPackageName(cast.App.PackageName)
+	cast.Channel.SetChannelActivity(cast.App.PackageName)
 	cast.SetDeviceToken("${device_tokens}")
 	cast.SetTemplateName(name)
 	cast.SetTimestamp()

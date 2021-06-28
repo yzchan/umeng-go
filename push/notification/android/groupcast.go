@@ -11,6 +11,7 @@ type Groupcast struct {
 	Payload      Payload     `json:"payload"`
 	Policy       Policy      `json:"policy,omitempty"`
 	Filter       interface{} `json:"filter"`
+	Channel      Channel     `json:"channel_properties,omitempty"`
 	MiPush
 }
 
@@ -29,7 +30,7 @@ func (cast *Groupcast) SetFilter(condition string) *Groupcast {
 }
 
 func (cast *Groupcast) Send() (string, error) {
-	cast.SetPackageName(cast.App.PackageName)
+	cast.Channel.SetChannelActivity(cast.App.PackageName)
 	return cast.BaseSend(cast)
 }
 
