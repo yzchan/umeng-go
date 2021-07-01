@@ -3,7 +3,6 @@ package ios
 import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Broadcast struct {
@@ -17,7 +16,6 @@ func NewBroadcast() *Broadcast {
 	cast.Type = "broadcast"
 	cast.Payload = make(Payload)
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

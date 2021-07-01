@@ -3,7 +3,6 @@ package ios
 import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Unicast struct {
@@ -19,7 +18,6 @@ func NewUnicast() *Unicast {
 	cast.Type = "unicast"
 	cast.Payload = make(Payload)
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

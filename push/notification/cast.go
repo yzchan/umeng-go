@@ -53,6 +53,11 @@ func (c *Cast) SetReceipt(url string, rType string) *Cast {
 	return c
 }
 
+func (c *Cast) SetType(castType string) *Cast {
+	c.Type = castType
+	return c
+}
+
 func (c *Cast) BindApp(app *push.App) *Cast {
 	c.App = app
 	return c

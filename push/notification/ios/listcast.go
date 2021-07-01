@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
 	"strings"
-	"time"
 )
 
 type Listcast struct {
@@ -19,7 +18,6 @@ func NewListcast() *Listcast {
 	cast.Type = "listcast"
 	cast.Payload = make(Payload)
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

@@ -3,7 +3,6 @@ package ios
 import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push/notification"
-	"time"
 )
 
 type Filecast struct {
@@ -18,7 +17,6 @@ func NewFilecast() *Filecast {
 	cast.Type = "filecast"
 	cast.Payload = make(Payload)
 	cast.Payload.Initial()
-	cast.Timestamp = time.Now().Unix()
 	return cast
 }
 

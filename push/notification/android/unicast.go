@@ -12,7 +12,6 @@ type Unicast struct {
 	Policy       Policy  `json:"policy,omitempty"`
 	Channel      Channel `json:"channel_properties,omitempty"`
 	TemplateName string  `json:"template_name,omitempty"`
-	MiPush
 }
 
 func NewUnicast() *Unicast {

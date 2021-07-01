@@ -13,7 +13,6 @@ type Customizedcast struct {
 	Payload   Payload `json:"payload"`
 	Policy    Policy  `json:"policy,omitempty"`
 	Channel   Channel `json:"channel_properties,omitempty"`
-	MiPush
 	TemplateName string `json:"template_name,omitempty"`
 }
 

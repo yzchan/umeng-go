@@ -10,7 +10,6 @@ type Broadcast struct {
 	Payload Payload `json:"payload"`
 	Policy  Policy  `json:"policy,omitempty"`
 	Channel Channel `json:"channel_properties,omitempty"`
-	MiPush
 }
 
 func NewBroadcast() *Broadcast {

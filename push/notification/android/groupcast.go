@@ -12,7 +12,6 @@ type Groupcast struct {
 	Policy       Policy      `json:"policy,omitempty"`
 	Filter       interface{} `json:"filter"`
 	Channel      Channel     `json:"channel_properties,omitempty"`
-	MiPush
 }
 
 func NewGroupcast() *Groupcast {
