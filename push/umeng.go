@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	Host        string = "http://msg.umeng.com" // https://msgapi.umeng.com
+	Host        string = "https://msgapi.umeng.com"
 	SendPath    string = "/api/send"
 	StatusPath  string = "/api/status"
 	ChannelPath string = "/api/channel/data"
@@ -29,6 +29,8 @@ const (
 	IOS     string = "ios"
 	Android string = "android"
 )
+
+var Proxy string
 
 type Umeng struct {
 	Android *App

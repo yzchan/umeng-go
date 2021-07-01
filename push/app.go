@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -22,14 +23,15 @@ type App struct {
 	Debug        bool
 }
 
-func (a *App) Request(url string, reqBody interface{}) (content []byte, err error) {
+func (a *App) Request(uri string, reqBody interface{}) (content []byte, err error) {
 	var (
 		body []byte
 		resp *http.Response
 		req  *http.Request
+		proxy func(*http.Request) (*url.URL, error)
 	)
 
-	if a.Debug && strings.HasSuffix(url, SendPath) {
+	if a.Debug && strings.HasSuffix(uri, SendPath) {
 		body, err = json.MarshalIndent(reqBody, "", "    ")
 	} else {
 		body, err = json.Marshal(reqBody)
@@ -39,14 +41,24 @@ func (a *App) Request(url string, reqBody interface{}) (content []byte, err erro
 		return
 	}
 
-	url = fmt.Sprintf("%s?sign=%s", url, a.Sign(url, string(body)))
+	uri = fmt.Sprintf("%s?sign=%s", uri, a.Sign(uri, string(body)))
 
 	if a.Debug {
 		log.Println("==========Umeng Request==========")
-		log.Printf("POST %s\n%s\n", url, string(body))
+		log.Printf("POST %s\n%s\n", uri, string(body))
 	}
-	client := http.Client{Timeout: time.Second * 5}
-	if req, err = http.NewRequest("POST", url, bytes.NewBuffer(body)); err != nil {
+
+	if Proxy != "" {
+		proxy = func(_ *http.Request) (*url.URL, error) {
+			return url.Parse(Proxy)
+		}
+	}
+
+	client := &http.Client{
+		Transport: &http.Transport{Proxy: proxy},
+		Timeout:   time.Second * 5,
+	}
+	if req, err = http.NewRequest("POST", uri, bytes.NewBuffer(body)); err != nil {
 		return
 	}
 	req.Header.Add("Content-Type", "application/json")
