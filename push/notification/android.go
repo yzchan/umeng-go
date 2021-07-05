@@ -2,13 +2,13 @@ package notification
 
 import (
 	"encoding/json"
-	"github.com/yzchan/umeng-go/push/notification/android"
+	. "github.com/yzchan/umeng-go/push/notification/payload"
 )
 
 type AndroidNotification struct {
 	Notification
-	Payload android.Payload `json:"payload"`
-	Channel Channel         `json:"channel_properties,omitempty"`
+	Payload AndroidPayload `json:"payload"`
+	Channel Channel        `json:"channel_properties,omitempty"`
 }
 
 func NewAndroidNotification() *AndroidNotification {

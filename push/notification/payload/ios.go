@@ -1,18 +1,18 @@
-package ios
+package payload
 
-type Payload map[string]interface{}
+type IOSPayload map[string]interface{}
 
-func (p *Payload) Initial() {
+func (p *IOSPayload) Initial() {
 	(*p)["aps"] = &APNs{
 		ContentAvailable: 0,
 	}
 }
 
-func (p *Payload) GetAPNs() *APNs {
+func (p *IOSPayload) GetAPNs() *APNs {
 	return (*p)["aps"].(*APNs)
 }
 
-func (p *Payload) AddExtra(key string, val string) *Payload {
+func (p *IOSPayload) AddExtra(key string, val string) *IOSPayload {
 	if key == "aps" { // 防止自定义aps覆盖
 		return p
 	}

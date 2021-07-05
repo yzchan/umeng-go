@@ -3,6 +3,7 @@ package notification
 import (
 	"encoding/json"
 	"github.com/yzchan/umeng-go/push"
+	"strings"
 	"time"
 )
 
@@ -84,8 +85,21 @@ func (n *Notification) SetFilter(condition string) *Notification {
 	return n
 }
 
+func (n *Notification) SetDeviceToken(token string) *Notification {
+	n.DeviceTokens = token
+	return n
+}
+
 func (n *Notification) SetDeviceTokens(tokens string) *Notification {
 	n.DeviceTokens = tokens
+	return n
+}
+
+func (n *Notification) SetDeviceTokenList(tokens []string) *Notification {
+	if len(tokens) > 500 {
+		tokens = tokens[:500]
+	}
+	n.DeviceTokens = strings.Join(tokens, ",")
 	return n
 }
 

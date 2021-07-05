@@ -2,17 +2,17 @@ package notification
 
 import (
 	"encoding/json"
-	"github.com/yzchan/umeng-go/push/notification/ios"
+	. "github.com/yzchan/umeng-go/push/notification/payload"
 )
 
 type IOSNotification struct {
 	Notification
-	Payload ios.Payload `json:"payload"`
+	Payload IOSPayload `json:"payload"`
 }
 
 func NewIOSNotification() *IOSNotification {
 	cast := &IOSNotification{}
-	cast.Payload = make(ios.Payload)
+	cast.Payload = make(IOSPayload)
 	cast.Payload.Initial()
 	cast.Policy = &Policy{}
 	return cast

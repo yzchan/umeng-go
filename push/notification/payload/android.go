@@ -1,23 +1,23 @@
-package android
+package payload
 
-type Payload struct {
+type AndroidPayload struct {
 	DisplayType string `json:"display_type"`
 	Body        Body   `json:"body"`
 	Extra       Extra  `json:"extra,omitempty"`
 }
 
-func (p *Payload) Initial() *Payload {
+func (p *AndroidPayload) Initial() *AndroidPayload {
 	p.Extra = make(Extra)
 	p.DisplayType = "notification"
 	return p
 }
 
-func (p *Payload) AddExtra(key string, val string) *Payload {
+func (p *AndroidPayload) AddExtra(key string, val string) *AndroidPayload {
 	p.Extra.AddKV(key, val)
 	return p
 }
 
-func (p *Payload) SetDisplayType(displayType string) *Payload {
+func (p *AndroidPayload) SetDisplayType(displayType string) *AndroidPayload {
 	if displayType == "message" {
 		p.DisplayType = displayType
 	} else {
