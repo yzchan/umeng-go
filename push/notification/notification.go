@@ -16,6 +16,14 @@ const (
 	Customizedcast string = "customizedcast"
 )
 
+type Notificationer interface {
+	GetNotification() *Notification
+	SetTitle(title string) Notificationer
+	SetText(title string) Notificationer
+	SetExtras(extra map[string]string) Notificationer
+	Send() (string, error)
+}
+
 type Notification struct {
 	App            *push.App   `json:"-"`
 	AppKey         string      `json:"appkey"`
@@ -32,6 +40,15 @@ type Notification struct {
 	ReceiptUrl     string      `json:"receipt_url,omitempty"`     // U-Push Pro 回执地址 最大长度256字节。
 	ReceiptType    string      `json:"receipt_type,omitempty"`    // U-Push Pro 回执类型 1：送达回执；2：点击回执；3：送达和点击/忽略回执。默认为3
 	TemplateName   string      `json:"template_name,omitempty"`
+}
+
+func NewUmengNotification(platform string) (n Notificationer) {
+	if platform == push.Android {
+		n = NewAndroidNotification()
+	} else if platform == push.IOS {
+		n = NewIOSNotification()
+	}
+	return
 }
 
 type CastResp struct {

@@ -12,10 +12,10 @@ type AndroidNotification struct {
 }
 
 func NewAndroidNotification() *AndroidNotification {
-	cast := &AndroidNotification{}
-	cast.Payload.Initial()
-	cast.Policy = &Policy{}
-	return cast
+	n := &AndroidNotification{}
+	n.Payload.Initial()
+	n.Policy = &Policy{}
+	return n
 }
 
 func (n *AndroidNotification) Send() (string, error) {
@@ -31,4 +31,25 @@ func (n *AndroidNotification) AddToTemplate(name string) (string, error) {
 func (n *AndroidNotification) String() string {
 	marshaled, _ := json.Marshal(n)
 	return string(marshaled)
+}
+
+func (n *AndroidNotification) GetNotification() *Notification {
+	return &n.Notification
+}
+
+func (n *AndroidNotification) SetTitle(title string) Notificationer {
+	n.Payload.Body.SetTitle(title)
+	return n
+}
+
+func (n *AndroidNotification) SetText(text string) Notificationer {
+	n.Payload.Body.SetText(text)
+	return n
+}
+
+func (n *AndroidNotification) SetExtras(extras map[string]string) Notificationer {
+	for k, v := range extras {
+		n.Payload.AddExtra(k, v)
+	}
+	return n
 }

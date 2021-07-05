@@ -22,7 +22,7 @@ func (p *IOSPayload) AddExtra(key string, val string) *IOSPayload {
 
 type Alert struct {
 	Title    string `json:"title"`
-	Subtitle string `json:"subtitle"`
+	SubTitle string `json:"subtitle"`
 	Body     string `json:"body"`
 }
 
@@ -35,12 +35,27 @@ type APNs struct {
 	QFAttach         string `json:"QFAttach,omitempty"`
 }
 
-func (a *APNs) SetAlert(title string, subTitle string, body string) *APNs {
-	a.Alert = &Alert{
-		Title:    title,
-		Subtitle: subTitle,
-		Body:     body,
+func (a *APNs) SetTitle(title string) *APNs {
+	if a.Alert == nil {
+		a.Alert = &Alert{}
 	}
+	a.Alert.Title = title
+	return a
+}
+
+func (a *APNs) SetSubTitle(subTitle string) *APNs {
+	if a.Alert == nil {
+		a.Alert = &Alert{}
+	}
+	a.Alert.SubTitle = subTitle
+	return a
+}
+
+func (a *APNs) SetBody(body string) *APNs {
+	if a.Alert == nil {
+		a.Alert = &Alert{}
+	}
+	a.Alert.Body = body
 	return a
 }
 
