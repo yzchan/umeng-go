@@ -11,7 +11,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 )
 
@@ -25,17 +24,13 @@ type App struct {
 
 func (a *App) Request(uri string, reqBody interface{}) (content []byte, err error) {
 	var (
-		body []byte
-		resp *http.Response
-		req  *http.Request
+		body  []byte
+		resp  *http.Response
+		req   *http.Request
 		proxy func(*http.Request) (*url.URL, error)
 	)
 
-	if a.Debug && strings.HasSuffix(uri, SendPath) {
-		body, err = json.MarshalIndent(reqBody, "", "    ")
-	} else {
-		body, err = json.Marshal(reqBody)
-	}
+	body, err = json.Marshal(reqBody)
 
 	if err != nil {
 		return

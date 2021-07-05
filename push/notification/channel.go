@@ -1,4 +1,4 @@
-package android
+package notification
 
 type Channel struct {
 	ChannelActivity    string `json:"channel_activity,omitempty"`
