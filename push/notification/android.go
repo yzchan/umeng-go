@@ -23,6 +23,11 @@ func (n *AndroidNotification) Send() (string, error) {
 	return n.BaseSend(n)
 }
 
+func (n *AndroidNotification) AddToTemplate(name string) (string, error) {
+	n.Channel.SetChannelActivity(n.App.PackageName)
+	return n.InitTemplate(name)
+}
+
 func (n *AndroidNotification) String() string {
 	marshaled, _ := json.Marshal(n)
 	return string(marshaled)

@@ -31,6 +31,7 @@ type Notification struct {
 	ProductionMode string      `json:"production_mode,omitempty"` // 默认为true
 	ReceiptUrl     string      `json:"receipt_url,omitempty"`     // U-Push Pro 回执地址 最大长度256字节。
 	ReceiptType    string      `json:"receipt_type,omitempty"`    // U-Push Pro 回执类型 1：送达回执；2：点击回执；3：送达和点击/忽略回执。默认为3
+	TemplateName   string      `json:"template_name,omitempty"`
 }
 
 type CastResp struct {
@@ -112,6 +113,19 @@ func (n *Notification) SetReceipt(url string, rType string) *Notification {
 func (n *Notification) SetNotificationType(t string) *Notification {
 	n.Type = t
 	return n
+}
+
+func (n *Notification) InitTemplate(name string) (string, error) {
+	n.SetAppKey(n.App.AppKey)
+	if n.Type == Listcast {
+		n.SetDeviceToken("${device_tokens}")
+	} else if n.Type == Customizedcast {
+		n.SetAlias("${alias}")
+		n.SetFileId("")
+	}
+	n.InitTimestamp()
+	n.TemplateName = name
+	return n.App.AddTemplate(n)
 }
 
 func (n *Notification) BindApp(app *push.App) *Notification {
