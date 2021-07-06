@@ -51,3 +51,8 @@ func (n *IOSNotification) SetExtras(extras map[string]string) Notificationer {
 	}
 	return n
 }
+
+func (n *IOSNotification) SetImage(img string) Notificationer {
+	n.Payload.GetAPNs().SetImg(img)
+	return n
+}

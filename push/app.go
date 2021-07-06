@@ -39,7 +39,7 @@ func (a *App) Request(uri string, reqBody interface{}) (content []byte, err erro
 	uri = fmt.Sprintf("%s?sign=%s", uri, a.Sign(uri, string(body)))
 
 	if a.Debug {
-		log.Println("==========Umeng Request==========")
+		log.Println("==========Umeng Debug Start [Request↓]==========")
 		log.Printf("POST %s\n%s\n", uri, string(body))
 	}
 
@@ -66,8 +66,9 @@ func (a *App) Request(uri string, reqBody interface{}) (content []byte, err erro
 		return
 	}
 	if a.Debug {
-		log.Println("==========Umeng Response==========")
+		log.Println("==========Umeng Debug [Response↓]==========")
 		log.Printf("Http Code:%d\n%s\n", resp.StatusCode, string(content))
+		log.Println("==========Umeng Debug End==========")
 	}
 	// 统一处理非200响应
 	if resp.StatusCode != 200 {

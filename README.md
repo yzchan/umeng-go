@@ -49,9 +49,9 @@ func main() {
 	fmt.Println(u.Android.Status("us*****"))
 
 	// 撤销推送
-	fmt.Println(u.Android.Cancel("um*****"))
+	fmt.Println(u.GetApp(push.Android).Cancel("um*****"))
 
-	// 新建一条单播推送
+	// 新建一条android单播消息
 	n := android.NewUnicast()
 	n.SetDescription("单播测试")
 	n.Payload.Body.SetTitle("push title").SetText("push text")

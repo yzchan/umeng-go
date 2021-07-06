@@ -1,0 +1,14 @@
+package tests
+
+const (
+	AndroidAppKey       string = ""
+	AndroidMasterSecret string = ""
+	AndroidPackageName  string = ""
+	AndroidToken1       string = ""
+	AndroidToken2       string = ""
+
+	IOSAppKey       string = ""
+	IOSMasterSecret string = ""
+	IOSToken1       string = ""
+	IOSToken2       string = ""
+)

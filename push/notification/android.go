@@ -53,3 +53,8 @@ func (n *AndroidNotification) SetExtras(extras map[string]string) Notificationer
 	}
 	return n
 }
+
+func (n *AndroidNotification) SetImage(img string) Notificationer {
+	n.Payload.Body.SetImg(img)
+	return n
+}

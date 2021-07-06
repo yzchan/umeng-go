@@ -1,4 +1,4 @@
-package android
+package ios
 
 import (
 	"github.com/yzchan/umeng-go/push/notification"
