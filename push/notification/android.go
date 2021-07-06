@@ -61,5 +61,6 @@ func (n *AndroidNotification) SetImage(img string) Notificationer {
 
 func (n *AndroidNotification) SetSilent() Notificationer {
 	n.Payload.SetDisplayType("message")
+	n.Payload.Body.SetCustom("")
 	return n
 }
