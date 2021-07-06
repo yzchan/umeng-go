@@ -21,6 +21,7 @@ type Notificationer interface {
 	SetTitle(title string) Notificationer
 	SetText(title string) Notificationer
 	SetExtras(extra map[string]string) Notificationer
+	SetSilent() Notificationer
 	Send() (string, error)
 }
 

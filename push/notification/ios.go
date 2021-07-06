@@ -56,3 +56,10 @@ func (n *IOSNotification) SetImage(img string) Notificationer {
 	n.Payload.GetAPNs().SetImg(img)
 	return n
 }
+
+func (n *IOSNotification) SetSilent() Notificationer {
+	n.Payload.GetAPNs().Alert = nil
+	n.Payload.GetAPNs().SetSound("")
+	n.Payload.GetAPNs().SetContentAvailable(1)
+	return n
+}

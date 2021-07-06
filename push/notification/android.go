@@ -58,3 +58,8 @@ func (n *AndroidNotification) SetImage(img string) Notificationer {
 	n.Payload.Body.SetImg(img)
 	return n
 }
+
+func (n *AndroidNotification) SetSilent() Notificationer {
+	n.Payload.SetDisplayType("message")
+	return n
+}
