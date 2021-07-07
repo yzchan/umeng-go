@@ -30,6 +30,16 @@ const (
 	Android string = "android"
 )
 
+var Proxy string
+
+func UseProxy(addr string) {
+	Proxy = addr
+}
+
+func UnsetProxy() {
+	UseProxy("")
+}
+
 type Umeng struct {
 	Android *App
 	IOS     *App
@@ -73,8 +83,6 @@ func (u *Umeng) GetApp(platform string) *App {
 	return &App{}
 }
 
-var Proxy string
-
 func (u *Umeng) UseProxy(addr string) {
-	Proxy = addr
+	UseProxy(addr)
 }
