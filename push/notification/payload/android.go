@@ -49,7 +49,7 @@ type Body struct { // 必填，消息体
 	AfterOpen   string `json:"after_open,omitempty"`
 	Url         string `json:"url,omitempty"`
 	Activity    string `json:"activity,omitempty"`
-	Custom      string `json:"custom,omitempty"`
+	Custom      string `json:"custom"`
 }
 
 func (b *Body) SetTitle(title string) *Body {
