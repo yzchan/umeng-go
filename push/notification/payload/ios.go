@@ -31,6 +31,7 @@ type APNs struct {
 	Badge            string `json:"badge,omitempty"`
 	Sound            string `json:"sound"`
 	ContentAvailable int    `json:"content-available,omitempty"`
+	MutableContent   int    `json:"mutable-content,omitempty"`
 	Category         string `json:"category,omitempty"`
 	QFAttach         string `json:"QFAttach,omitempty"`
 }
@@ -71,6 +72,11 @@ func (a *APNs) SetSound(sound string) *APNs {
 
 func (a *APNs) SetContentAvailable(val int) *APNs {
 	a.ContentAvailable = val
+	return a
+}
+
+func (a *APNs) SetMutableContent(val int) *APNs {
+	a.MutableContent = val
 	return a
 }
 
