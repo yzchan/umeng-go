@@ -63,3 +63,8 @@ func (n *IOSNotification) SetSilent() Notificationer {
 	n.Payload.GetAPNs().SetContentAvailable(1)
 	return n
 }
+
+func (n *IOSNotification) SetBadge(badge string) Notificationer {
+	n.Payload.GetAPNs().Badge = badge
+	return n
+}

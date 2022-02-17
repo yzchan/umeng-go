@@ -64,3 +64,7 @@ func (n *AndroidNotification) SetSilent() Notificationer {
 	n.Payload.Body.SetCustom("")
 	return n
 }
+
+func (n *AndroidNotification) SetBadge(badge string) Notificationer {
+	return n
+}
