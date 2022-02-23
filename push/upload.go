@@ -15,22 +15,22 @@ type UploadReq struct {
 type UploadResp struct {
 	Ret  string `json:"ret"`
 	Data struct {
-		FileId    string `json:"file_id"`
+		FileId string `json:"file_id"`
 	} `json:"data"`
 }
 
-func (a *App) UploadFile(file string) (fileId string, err error) {
+func (c *Client) UploadFile(file string) (fileId string, err error) {
 	var content []byte
 	if content, err = ioutil.ReadFile(file); err != nil {
 		return
 	}
-	return a.Upload(string(content))
+	return c.Upload(string(content))
 }
 
-func (a *App) Upload(content string) (fileId string, err error) {
+func (c *Client) Upload(content string) (fileId string, err error) {
 	var result []byte
-	data := UploadReq{a.AppKey, time.Now().Unix(), content}
-	if result, err = a.Request(Host+UploadPath, data); err != nil {
+	data := UploadReq{c.AppKey, time.Now().Unix(), content}
+	if result, err = c.Request(Host+UploadPath, data); err != nil {
 		return
 	}
 

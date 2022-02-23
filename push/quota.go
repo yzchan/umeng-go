@@ -25,10 +25,10 @@ type QuotaData struct {
 	OppoRemainCount    string `json:"oppoRemainCount"`
 }
 
-func (a *App) Quota() (ret QuotaData, err error) {
+func (c *Client) Quota() (ret QuotaData, err error) {
 	var result []byte
-	data := QuotaReq{a.AppKey, time.Now().Unix()}
-	if result, err = a.Request(Host+QuotaPath, data); err != nil {
+	data := QuotaReq{c.AppKey, time.Now().Unix()}
+	if result, err = c.Request(Host+QuotaPath, data); err != nil {
 		return
 	}
 	var q QuotaResp

@@ -41,14 +41,14 @@ func UnsetProxy() {
 }
 
 type Umeng struct {
-	Android *App
-	IOS     *App
+	Android *Client
+	IOS     *Client
 }
 
 func NewUmeng() *Umeng {
 	return &Umeng{
-		Android: &App{Platform: Android},
-		IOS:     &App{Platform: IOS},
+		Android: &Client{Platform: Android},
+		IOS:     &Client{Platform: IOS},
 	}
 }
 
@@ -74,13 +74,13 @@ func (u *Umeng) Debug(debug bool) *Umeng {
 	return u
 }
 
-func (u *Umeng) GetApp(platform string) *App {
+func (u *Umeng) GetApp(platform string) *Client {
 	if strings.ToLower(platform) == IOS {
 		return u.IOS
 	} else if strings.ToLower(platform) == Android {
 		return u.Android
 	}
-	return &App{}
+	return &Client{}
 }
 
 func (u *Umeng) UseProxy(addr string) {

@@ -13,13 +13,13 @@ type AddTemplateResp struct {
 	} `json:"data"`
 }
 
-func (a *App) AddTemplate(template interface{}) (templateId string, err error) {
+func (c *Client) AddTemplate(template interface{}) (templateId string, err error) {
 	var (
 		buf []byte
 		r   AddTemplateResp
 	)
 
-	if buf, err = a.Request(Host+TmplAddPath, template); err != nil {
+	if buf, err = c.Request(Host+TmplAddPath, template); err != nil {
 		return
 	}
 
@@ -50,15 +50,15 @@ type Template struct {
 	Id           int    `json:"id"`
 }
 
-func (a *App) GetTemplate(templateId string) (ret *Template, err error) {
+func (c *Client) GetTemplate(templateId string) (ret *Template, err error) {
 	payload := TemplateReq{
-		Appkey:     a.AppKey,
+		Appkey:     c.AppKey,
 		Timestamp:  time.Now().Unix(),
 		TemplateId: templateId,
 	}
 
 	var buf []byte
-	if buf, err = a.Request(Host+TmplGetPath, payload); err != nil {
+	if buf, err = c.Request(Host+TmplGetPath, payload); err != nil {
 		return
 	}
 
@@ -70,14 +70,14 @@ func (a *App) GetTemplate(templateId string) (ret *Template, err error) {
 	return &r.Data, nil
 }
 
-func (a *App) DeleteTemplate(templateId string) (err error) {
+func (c *Client) DeleteTemplate(templateId string) (err error) {
 	payload := TemplateReq{
-		Appkey:     a.AppKey,
+		Appkey:     c.AppKey,
 		Timestamp:  time.Now().Unix(),
 		TemplateId: templateId,
 	}
 
-	if _, err = a.Request(Host+TmplDeletePath, payload); err != nil {
+	if _, err = c.Request(Host+TmplDeletePath, payload); err != nil {
 		return NewUmengError(404, "模板不存在")
 	}
 
@@ -104,16 +104,16 @@ type ListTemplateData struct {
 	List  []Template `json:"list"`
 }
 
-func (a *App) ListTemplate(page int, limit int) (ret *ListTemplateData, err error) {
+func (c *Client) ListTemplate(page int, limit int) (ret *ListTemplateData, err error) {
 	payload := ListTemplateReq{
-		Appkey:    a.AppKey,
+		Appkey:    c.AppKey,
 		Timestamp: time.Now().Unix(),
 		Index:     page,
 		Len:       limit,
 	}
 
 	var buf []byte
-	if buf, err = a.Request(Host+TmplListPath, payload); err != nil {
+	if buf, err = c.Request(Host+TmplListPath, payload); err != nil {
 		return
 	}
 
@@ -125,8 +125,8 @@ func (a *App) ListTemplate(page int, limit int) (ret *ListTemplateData, err erro
 	return &r.Data, nil
 }
 
-func (a *App) GetTemplateCount() int {
-	ret, err := a.ListTemplate(1, 1)
+func (c *Client) GetTemplateCount() int {
+	ret, err := c.ListTemplate(1, 1)
 	if err != nil {
 		return 0
 	}
@@ -147,16 +147,16 @@ type SendTemplateMsgResp struct {
 	} `json:"data"`
 }
 
-func (a *App) SendTemplateMsg(templateId string, data []interface{}) (templateMsgId string, err error) {
+func (c *Client) SendTemplateMsg(templateId string, data []interface{}) (templateMsgId string, err error) {
 	payload := SendTemplateMsgReq{
-		Appkey:     a.AppKey,
+		Appkey:     c.AppKey,
 		Timestamp:  time.Now().Unix(),
 		TemplateId: templateId,
 		ParamsData: data,
 	}
 
 	var buf []byte
-	if buf, err = a.Request(Host+TmplSendPath, payload); err != nil {
+	if buf, err = c.Request(Host+TmplSendPath, payload); err != nil {
 		return
 	}
 
@@ -192,9 +192,9 @@ type Msg struct {
 	TemplateMsgId string `json:"templateMsgId"`
 }
 
-func (a *App) GetMsg(templateMsgId string, limit int, cursor string) (ret []Msg, last string, err error) {
+func (c *Client) GetMsg(templateMsgId string, limit int, cursor string) (ret []Msg, last string, err error) {
 	payload := MsgReq{
-		Appkey:        a.AppKey,
+		Appkey:        c.AppKey,
 		Timestamp:     time.Now().Unix(),
 		TemplateMsgId: templateMsgId,
 		Len:           limit,
@@ -202,7 +202,7 @@ func (a *App) GetMsg(templateMsgId string, limit int, cursor string) (ret []Msg,
 	}
 
 	var buf []byte
-	if buf, err = a.Request(Host+TmplMsgPath, payload); err != nil {
+	if buf, err = c.Request(Host+TmplMsgPath, payload); err != nil {
 		return
 	}
 

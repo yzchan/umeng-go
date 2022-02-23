@@ -22,16 +22,16 @@ func (t *tagReq) setDeviceToken(device string) *tagReq {
 	return t
 }
 
-func (a *App) buildTagReq() (req *tagReq) {
+func (c *Client) buildTagReq() (req *tagReq) {
 	req = new(tagReq)
-	req.Appkey = a.AppKey
+	req.Appkey = c.AppKey
 	req.Timestamp = time.Now().Unix()
 	return req
 }
 
-func (a *App) ListTags(device string) (tags []string, err error) {
-	data := a.buildTagReq().setDeviceToken(device)
-	result, err := a.Request(Host+TagListPath, data)
+func (c *Client) ListTags(device string) (tags []string, err error) {
+	data := c.buildTagReq().setDeviceToken(device)
+	result, err := c.Request(Host+TagListPath, data)
 	if err != nil {
 		return
 	}
@@ -53,34 +53,34 @@ func (a *App) ListTags(device string) (tags []string, err error) {
 	return strings.Split(v.Data.Data.Tags, ","), nil
 }
 
-func (a *App) AddTags(device string, tags []string) (err error) {
-	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = a.Request(Host+TagAddPath, data)
+func (c *Client) AddTags(device string, tags []string) (err error) {
+	data := c.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = c.Request(Host+TagAddPath, data)
 	return
 }
 
-func (a *App) AddTag(device string, tag string) (err error) {
-	return a.AddTags(device, []string{tag})
+func (c *Client) AddTag(device string, tag string) (err error) {
+	return c.AddTags(device, []string{tag})
 }
 
-func (a *App) SetTags(device string, tags []string) (err error) {
-	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = a.Request(Host+TagSetPath, data)
+func (c *Client) SetTags(device string, tags []string) (err error) {
+	data := c.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = c.Request(Host+TagSetPath, data)
 	return
 }
 
-func (a *App) DeleteTags(device string, tags []string) (err error) {
-	data := a.buildTagReq().setDeviceToken(device).setTags(tags)
-	_, err = a.Request(Host+TagDeletePath, data)
+func (c *Client) DeleteTags(device string, tags []string) (err error) {
+	data := c.buildTagReq().setDeviceToken(device).setTags(tags)
+	_, err = c.Request(Host+TagDeletePath, data)
 	return
 }
 
-func (a *App) DeleteTag(device string, tag string) (err error) {
-	return a.DeleteTags(device, []string{tag})
+func (c *Client) DeleteTag(device string, tag string) (err error) {
+	return c.DeleteTags(device, []string{tag})
 }
 
-func (a *App) ClearTags(device string) (err error) {
-	data := a.buildTagReq().setDeviceToken(device)
-	_, err = a.Request(Host+TagClearPath, data)
+func (c *Client) ClearTags(device string) (err error) {
+	data := c.buildTagReq().setDeviceToken(device)
+	_, err = c.Request(Host+TagClearPath, data)
 	return
 }

@@ -17,16 +17,16 @@ const (
 )
 
 type Notificationer interface {
-	GetNotification() *Notification
-	SetTitle(title string) Notificationer
-	SetText(title string) Notificationer
-	SetExtras(extra map[string]string) Notificationer
-	SetSilent() Notificationer
-	Send() (string, error)
+	//GetNotification() *Notification
+	//SetTitle(title string) Notificationer
+	//SetText(title string) Notificationer
+	//SetExtras(extra map[string]string) Notificationer
+	//SetSilent() Notificationer
+	//Send() (string, error)
 }
 
 type Notification struct {
-	App            *push.App   `json:"-"`
+	//App            *push.Client `json:"-"`
 	AppKey         string      `json:"appkey"`
 	Type           string      `json:"type"`
 	Timestamp      int64       `json:"timestamp"`
@@ -43,14 +43,14 @@ type Notification struct {
 	TemplateName   string      `json:"template_name,omitempty"`
 }
 
-func NewUmengNotification(platform string) (n Notificationer) {
-	if platform == push.Android {
-		n = NewAndroidNotification()
-	} else if platform == push.IOS {
-		n = NewIOSNotification()
-	}
-	return
-}
+//func NewUmengNotification(platform string) (n Notificationer) {
+//	if platform == push.Android {
+//		n = NewAndroidNotification()
+//	} else if platform == push.IOS {
+//		n = NewIOSNotification()
+//	}
+//	return
+//}
 
 type CastResp struct {
 	Ret  string `json:"ret"`
@@ -60,9 +60,12 @@ type CastResp struct {
 	} `json:"data"`
 }
 
-func (n *Notification) SetAppKey(key string) *Notification {
+func (n *Notification) SetAppKey(key string) {
 	n.AppKey = key
-	return n
+}
+
+func (n *Notification) GetUri() string {
+	return push.Host + push.SendPath
 }
 
 func (n *Notification) InitTimestamp() *Notification {
@@ -133,39 +136,39 @@ func (n *Notification) SetNotificationType(t string) *Notification {
 	return n
 }
 
-func (n *Notification) InitTemplate(name string) (string, error) {
-	n.SetAppKey(n.App.AppKey)
-	if n.Type == Listcast {
-		n.SetDeviceToken("${device_tokens}")
-	} else if n.Type == Customizedcast {
-		n.SetAlias("${alias}")
-		n.SetFileId("")
-	}
-	n.InitTimestamp()
-	n.TemplateName = name
-	return n.App.AddTemplate(n)
-}
+//func (n *Notification) InitTemplate(name string) (string, error) {
+//	n.SetAppKey(n.App.AppKey)
+//	if n.Type == Listcast {
+//		n.SetDeviceToken("${device_tokens}")
+//	} else if n.Type == Customizedcast {
+//		n.SetAlias("${alias}")
+//		n.SetFileId("")
+//	}
+//	n.InitTimestamp()
+//	n.TemplateName = name
+//	return n.App.AddTemplate(n)
+//}
 
-func (n *Notification) BindApp(app *push.App) *Notification {
-	n.App = app
-	n.SetAppKey(app.AppKey)
-	return n
-}
-
-func (n *Notification) BaseSend(notification interface{}) (taskOrMsgId string, err error) {
-	var (
-		buf []byte
-		r   CastResp
-	)
-	n.InitTimestamp()
-
-	if buf, err = n.App.Request(push.Host+push.SendPath, notification); err != nil {
-		return
-	}
-
-	if err = json.Unmarshal(buf, &r); err != nil {
-		return
-	}
-
-	return r.Data.MsgId + r.Data.TaskId, nil
-}
+//func (n *Notification) BindApp(app *push.Client) *Notification {
+//	n.App = app
+//	n.SetAppKey(app.AppKey)
+//	return n
+//}
+//
+//func (n *Notification) BaseSend(notification interface{}) (taskOrMsgId string, err error) {
+//	var (
+//		buf []byte
+//		r   CastResp
+//	)
+//	n.InitTimestamp()
+//
+//	if buf, err = n.App.Request(push.Host+push.SendPath, notification); err != nil {
+//		return
+//	}
+//
+//	if err = json.Unmarshal(buf, &r); err != nil {
+//		return
+//	}
+//
+//	return r.Data.MsgId + r.Data.TaskId, nil
+//}

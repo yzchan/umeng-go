@@ -14,7 +14,12 @@ import (
 	"time"
 )
 
-type App struct {
+type CastRequester interface {
+	SetAppKey(key string)
+	GetUri() string
+}
+
+type Client struct {
 	AppKey       string
 	MasterSecret string
 	Platform     string
@@ -22,7 +27,7 @@ type App struct {
 	Debug        bool
 }
 
-func (a *App) Request(uri string, reqBody interface{}) (content []byte, err error) {
+func (c *Client) Request(uri string, reqBody interface{}) (content []byte, err error) {
 	var (
 		body  []byte
 		resp  *http.Response
@@ -36,11 +41,11 @@ func (a *App) Request(uri string, reqBody interface{}) (content []byte, err erro
 		return
 	}
 
-	uri = fmt.Sprintf("%s?sign=%s", uri, a.Sign(uri, string(body)))
+	uri = fmt.Sprintf("%s?sign=%s", uri, c.Sign(uri, string(body)))
 
-	if a.Debug {
-		log.Println("==========Umeng Debug Start [Request↓]==========")
-		log.Printf("POST %s\n%s\n", uri, string(body))
+	if c.Debug {
+		log.Println("==================== Umeng Debug Start ====================")
+		log.Printf("[Request] POST %s\n%s\n", uri, string(body))
 	}
 
 	if Proxy != "" {
@@ -65,10 +70,10 @@ func (a *App) Request(uri string, reqBody interface{}) (content []byte, err erro
 	if content, err = ioutil.ReadAll(resp.Body); err != nil {
 		return
 	}
-	if a.Debug {
-		log.Println("==========Umeng Debug [Response↓]==========")
-		log.Printf("Http Code:%d\n%s\n", resp.StatusCode, string(content))
-		log.Println("==========Umeng Debug End==========")
+	if c.Debug {
+		log.Printf("[Response] Http Code:%d\n%s\n", resp.StatusCode, string(content))
+		log.Println("==================== Umeng Debug End ====================")
+		log.Println()
 	}
 	// 统一处理非200响应
 	if resp.StatusCode != 200 {
@@ -81,8 +86,15 @@ func (a *App) Request(uri string, reqBody interface{}) (content []byte, err erro
 	return
 }
 
-func (a *App) Sign(url string, body string) string {
-	str := fmt.Sprintf("%s%s%s%s", "POST", url, body, a.MasterSecret)
+func (c *Client) Send(n CastRequester) (content []byte, err error) {
+
+	n.SetAppKey(c.AppKey)
+
+	return c.Request(n.GetUri(), n)
+}
+
+func (c *Client) Sign(url string, body string) string {
+	str := fmt.Sprintf("%s%s%s%s", "POST", url, body, c.MasterSecret)
 	h := md5.New()
 	h.Write([]byte(str))
 	return hex.EncodeToString(h.Sum(nil))
