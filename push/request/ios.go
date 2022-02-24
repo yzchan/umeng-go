@@ -1,19 +1,27 @@
 package request
 
 import (
+	"github.com/yzchan/umeng-go/push"
 	"github.com/yzchan/umeng-go/push/notification"
 )
 
 type IOSBaseRequest struct {
 	notification.Notification
-	Payload notification.IOSPayload `json:"payload"`
+	Platform string                  `json:"-"`
+	Payload  notification.IOSPayload `json:"payload"`
+}
+
+func (r *IOSBaseRequest) GetPlatform() string {
+	return r.Platform
 }
 
 func NewIOSBaseRequest(cast string) *IOSBaseRequest {
-	n := &IOSBaseRequest{}
+	n := &IOSBaseRequest{Platform: push.IOS}
+	n.Payload = make(notification.IOSPayload)
+	n.Payload.Initial()
+	n.Policy = &notification.Policy{}
 	n.SetNotificationType(cast)
 	n.InitTimestamp()
-	n.Payload.Initial()
 	return n
 }
 

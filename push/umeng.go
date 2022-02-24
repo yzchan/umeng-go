@@ -74,10 +74,11 @@ func (u *Umeng) Debug(debug bool) *Umeng {
 	return u
 }
 
-func (u *Umeng) GetApp(platform string) *Client {
-	if strings.ToLower(platform) == IOS {
+func (u *Umeng) GetClient(platform string) *Client {
+	platform = strings.ToLower(platform)
+	if platform == IOS {
 		return u.IOS
-	} else if strings.ToLower(platform) == Android {
+	} else if platform == Android {
 		return u.Android
 	}
 	return &Client{}
@@ -85,4 +86,8 @@ func (u *Umeng) GetApp(platform string) *Client {
 
 func (u *Umeng) UseProxy(addr string) {
 	UseProxy(addr)
+}
+
+func (u *Umeng) Send(request CastRequester) (content []byte, err error) {
+	return u.GetClient(request.GetPlatform()).Send(request)
 }

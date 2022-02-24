@@ -15,8 +15,9 @@ import (
 )
 
 type CastRequester interface {
-	SetAppKey(key string)
-	GetUri() string
+	SetAppKey(appKey string)
+	GetPlatform() string
+	GetRequestUri() string
 }
 
 type Client struct {
@@ -87,10 +88,8 @@ func (c *Client) Request(uri string, reqBody interface{}) (content []byte, err e
 }
 
 func (c *Client) Send(n CastRequester) (content []byte, err error) {
-
 	n.SetAppKey(c.AppKey)
-
-	return c.Request(n.GetUri(), n)
+	return c.Request(n.GetRequestUri(), n)
 }
 
 func (c *Client) Sign(url string, body string) string {

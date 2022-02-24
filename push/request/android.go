@@ -1,20 +1,27 @@
 package request
 
 import (
+	"github.com/yzchan/umeng-go/push"
 	"github.com/yzchan/umeng-go/push/notification"
 )
 
 type AndroidBaseRequest struct {
 	notification.Notification
-	Payload notification.AndroidPayload `json:"payload"`
-	Channel notification.Channel        `json:"channel_properties,omitempty"`
+	Platform string                      `json:"-"`
+	Payload  notification.AndroidPayload `json:"payload"`
+	Channel  notification.Channel        `json:"channel_properties,omitempty"`
+}
+
+func (r *AndroidBaseRequest) GetPlatform() string {
+	return r.Platform
 }
 
 func NewAndroidBaseRequest(cast string) *AndroidBaseRequest {
-	n := &AndroidBaseRequest{}
+	n := &AndroidBaseRequest{Platform: push.Android}
 	n.SetNotificationType(cast)
 	n.InitTimestamp()
 	n.Payload.Initial()
+	n.Policy = &notification.Policy{}
 	return n
 }
 
