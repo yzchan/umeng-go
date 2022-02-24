@@ -1,5 +1,7 @@
 package payload
 
+import "strconv"
+
 type IOSPayload map[string]interface{}
 
 func (p *IOSPayload) Initial() {
@@ -28,7 +30,7 @@ type Alert struct {
 
 type APNs struct {
 	Alert            *Alert `json:"alert"`
-	Badge            string `json:"badge,omitempty"`
+	Badge            int    `json:"badge,omitempty"`
 	Sound            string `json:"sound"`
 	ContentAvailable int    `json:"content-available,omitempty"`
 	MutableContent   int    `json:"mutable-content,omitempty"`
@@ -61,7 +63,11 @@ func (a *APNs) SetBody(body string) *APNs {
 }
 
 func (a *APNs) SetBadge(badge string) *APNs {
-	a.Badge = badge
+	b, err := strconv.Atoi(badge)
+	if err != nil {
+		return a
+	}
+	a.Badge = b
 	return a
 }
 
