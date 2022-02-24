@@ -3,6 +3,7 @@ package notification
 import (
 	"encoding/json"
 	. "github.com/yzchan/umeng-go/push/notification/payload"
+	"strconv"
 )
 
 type IOSNotification struct {
@@ -65,6 +66,10 @@ func (n *IOSNotification) SetSilent() Notificationer {
 }
 
 func (n *IOSNotification) SetBadge(badge string) Notificationer {
-	n.Payload.GetAPNs().Badge = badge
+	b, err := strconv.Atoi(badge)
+	if err != nil {
+		return n
+	}
+	n.Payload.GetAPNs().Badge = b
 	return n
 }
