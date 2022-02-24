@@ -1,7 +1,6 @@
-package request
+package push
 
 import (
-	"github.com/yzchan/umeng-go/v2/push"
 	"github.com/yzchan/umeng-go/v2/push/notification"
 )
 
@@ -15,8 +14,12 @@ func (r *IOSRequest) GetPlatform() string {
 	return r.Platform
 }
 
+func (r *IOSRequest) GetRequestUri() string {
+	return Host + SendPath
+}
+
 func NewIOSRequest(cast string) *IOSRequest {
-	n := &IOSRequest{Platform: push.IOS}
+	n := &IOSRequest{Platform: IOS}
 	n.Payload = make(notification.IOSPayload)
 	n.Payload.Initial()
 	n.Policy = &notification.Policy{}

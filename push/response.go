@@ -1,4 +1,4 @@
-package notification
+package push
 
 type CastResp struct {
 	Ret  string `json:"ret"`

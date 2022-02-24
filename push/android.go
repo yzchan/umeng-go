@@ -1,7 +1,6 @@
-package request
+package push
 
 import (
-	"github.com/yzchan/umeng-go/v2/push"
 	"github.com/yzchan/umeng-go/v2/push/notification"
 )
 
@@ -16,8 +15,12 @@ func (r *AndroidRequest) GetPlatform() string {
 	return r.Platform
 }
 
+func (r *AndroidRequest) GetRequestUri() string {
+	return Host + SendPath
+}
+
 func NewAndroidRequest(cast string) *AndroidRequest {
-	n := &AndroidRequest{Platform: push.Android}
+	n := &AndroidRequest{Platform: Android}
 	n.SetNotificationType(cast)
 	n.InitTimestamp()
 	n.Payload.Initial()

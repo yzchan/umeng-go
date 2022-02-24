@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"strings"
 	"time"
-
-	"github.com/yzchan/umeng-go/v2/push"
 )
 
 const (
@@ -36,10 +34,6 @@ type Notification struct {
 
 func (n *Notification) SetAppKey(key string) {
 	n.AppKey = key
-}
-
-func (n *Notification) GetRequestUri() string {
-	return push.Host + push.SendPath
 }
 
 func (n *Notification) InitTimestamp() *Notification {
