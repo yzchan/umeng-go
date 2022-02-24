@@ -2,9 +2,10 @@ package notification
 
 import (
 	"encoding/json"
-	"github.com/yzchan/umeng-go/push"
 	"strings"
 	"time"
+
+	"github.com/yzchan/umeng-go/v2/push"
 )
 
 const (

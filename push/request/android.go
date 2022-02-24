@@ -1,23 +1,23 @@
 package request
 
 import (
-	"github.com/yzchan/umeng-go/push"
-	"github.com/yzchan/umeng-go/push/notification"
+	"github.com/yzchan/umeng-go/v2/push"
+	"github.com/yzchan/umeng-go/v2/push/notification"
 )
 
-type AndroidBaseRequest struct {
+type AndroidRequest struct {
 	notification.Notification
 	Platform string                      `json:"-"`
 	Payload  notification.AndroidPayload `json:"payload"`
 	Channel  notification.Channel        `json:"channel_properties,omitempty"`
 }
 
-func (r *AndroidBaseRequest) GetPlatform() string {
+func (r *AndroidRequest) GetPlatform() string {
 	return r.Platform
 }
 
-func NewAndroidBaseRequest(cast string) *AndroidBaseRequest {
-	n := &AndroidBaseRequest{Platform: push.Android}
+func NewAndroidRequest(cast string) *AndroidRequest {
+	n := &AndroidRequest{Platform: push.Android}
 	n.SetNotificationType(cast)
 	n.InitTimestamp()
 	n.Payload.Initial()
@@ -25,26 +25,26 @@ func NewAndroidBaseRequest(cast string) *AndroidBaseRequest {
 	return n
 }
 
-func NewAndroidUnicastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Unicast)
+func NewAndroidUnicastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Unicast)
 }
 
-func NewAndroidListcastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Listcast)
+func NewAndroidListcastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Listcast)
 }
 
-func NewAndroidGroupcastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Groupcast)
+func NewAndroidGroupcastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Groupcast)
 }
 
-func NewAndroidBroadcastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Broadcast)
+func NewAndroidBroadcastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Broadcast)
 }
 
-func NewAndroidFilecastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Filecast)
+func NewAndroidFilecastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Filecast)
 }
 
-func NewAndroidCustomizedcastRequest() *AndroidBaseRequest {
-	return NewAndroidBaseRequest(notification.Customizedcast)
+func NewAndroidCustomizedcastRequest() *AndroidRequest {
+	return NewAndroidRequest(notification.Customizedcast)
 }
