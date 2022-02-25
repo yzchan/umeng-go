@@ -5,10 +5,16 @@ type Channel struct {
 	XiaomiChannelId    string `json:"xiaomi_channel_id,omitempty"`
 	VivoClassification string `json:"vivo_classification,omitempty"`
 	OppoChannelId      string `json:"oppo_channel_id,omitempty"`
+	MainActivity       string `json:"main_activity,omitempty"`
 }
 
 func (c *Channel) SetChannelActivity(activity string) *Channel {
-	c.ChannelActivity = activity + ".activity.MiPushActivity"
+	c.ChannelActivity = activity
+	return c
+}
+
+func (c *Channel) SetMainActivity(activity string) *Channel {
+	c.MainActivity = activity
 	return c
 }
 

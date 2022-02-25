@@ -34,6 +34,7 @@ type APNs struct {
 	MutableContent   int    `json:"mutable-content,omitempty"`
 	Category         string `json:"category,omitempty"`
 	QFAttach         string `json:"QFAttach,omitempty"`
+	Custom           string `json:"custom,omitempty"`
 }
 
 func (a *APNs) SetTitle(title string) *APNs {
@@ -87,5 +88,10 @@ func (a *APNs) SetCategory(category string) *APNs {
 
 func (a *APNs) SetImg(img string) *APNs {
 	a.QFAttach = img
+	return a
+}
+
+func (a *APNs) SetCustom(custom string) *APNs {
+	a.Custom = custom
 	return a
 }

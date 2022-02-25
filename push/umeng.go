@@ -57,10 +57,6 @@ func (u *Umeng) InitAndroid(appkey string, secret string) *Umeng {
 	u.Android.MasterSecret = secret
 	return u
 }
-func (u *Umeng) SetPackageName(packageName string) *Umeng {
-	u.Android.PackageName = packageName
-	return u
-}
 
 func (u *Umeng) InitIOS(appkey string, secret string) *Umeng {
 	u.IOS.AppKey = appkey

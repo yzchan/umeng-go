@@ -35,8 +35,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/yzchan/umeng-go/push"
-	"github.com/yzchan/umeng-go/push/notification/android"
+	"github.com/yzchan/umeng-go/v2/push"
 )
 
 func main() {
@@ -49,16 +48,20 @@ func main() {
 	fmt.Println(u.Android.Status("us*****"))
 
 	// 撤销推送
-	fmt.Println(u.GetApp(push.Android).Cancel("um*****"))
+	fmt.Println(u.GetClient(push.IOS).Cancel("um*****"))
 
 	// 新建一条android单播消息
-	n := android.NewUnicast()
-	n.SetDescription("单播测试")
-	n.Payload.Body.SetTitle("push title").SetText("push text")
-	n.Payload.Extra.AddKV("extra1", "1").AddKV("extra2", "2")
-	n.SetDeviceToken("{input your device-token}") // 设置推送目标的设备
-	n.BindApp(u.Android)
-	fmt.Println(cast.Send())
+	request := push.NewAndroidUnicastRequest()
+	request.SetDescription("unicast-test")
+	request.Payload.Body.SetTitle("unicast-title").SetText("unicast-text")
+	request.Payload.Extra.AddKV("extra1", "1").AddKV("extra2", "2")
+	request.SetDeviceToken("<device_token>")
+
+	result, err: = u.Send(request)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(result))
 }
 ```
 
