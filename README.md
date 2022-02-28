@@ -40,7 +40,7 @@ import (
 
 func main() {
 	u := push.NewUmeng()
-	u.InitAndroid("*****", "*****").SetPackageName("com.***.forum")
+	u.InitAndroid("*****", "*****")
 	u.InitIOS("*****", "*****")
 	u.Debug(true) // 开启调试模式会输出http请求和响应内容
 
@@ -50,19 +50,18 @@ func main() {
 	// 撤销推送
 	fmt.Println(u.GetClient(push.IOS).Cancel("um*****"))
 
-	// 新建一条android单播消息
+	// 新建一条android单播推送请求
 	request := push.NewAndroidUnicastRequest()
 	request.SetDescription("unicast-test")
-	request.Payload.Body.SetTitle("unicast-title").SetText("unicast-text")
+	request.Payload.Body.SetTitle("<your title>").SetText("<your text>")
 	request.Payload.Extra.AddKV("extra1", "1").AddKV("extra2", "2")
-	request.SetDeviceToken("<device_token>")
+	request.SetDeviceToken("<device-token>")
 
-	result, err: = u.Send(request)
+	// 发送单播请求
+	result, err := u.Send(request)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(result))
+	fmt.Println(result)
 }
 ```
-
-> 更多示例程序见demo
