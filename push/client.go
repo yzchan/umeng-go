@@ -87,9 +87,21 @@ func (c *Client) Request(uri string, reqBody interface{}) (content []byte, err e
 	return
 }
 
-func (c *Client) Send(n CastRequester) (content []byte, err error) {
+func (c *Client) Send(n CastRequester) (taskOrMsgId string, err error) {
+	var (
+		buf []byte
+		r   CastResp
+	)
 	n.SetAppKey(c.AppKey)
-	return c.Request(n.GetRequestUri(), n)
+	if buf, err = c.Request(n.GetRequestUri(), n); err != nil {
+		return
+	}
+
+	if err = json.Unmarshal(buf, &r); err != nil {
+		return
+	}
+
+	return r.Data.MsgId + r.Data.TaskId, nil
 }
 
 func (c *Client) Sign(url string, body string) string {

@@ -84,6 +84,6 @@ func (u *Umeng) UseProxy(addr string) {
 	UseProxy(addr)
 }
 
-func (u *Umeng) Send(request CastRequester) (content []byte, err error) {
+func (u *Umeng) Send(request CastRequester) (taskOrMsgId string, err error) {
 	return u.GetClient(request.GetPlatform()).Send(request)
 }

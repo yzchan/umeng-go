@@ -12,22 +12,22 @@ type Policy struct {
 	ApnsCollapseId string `json:"apns_collapse_id,omitempty"` // 只对ios生效
 }
 
-func (p *Policy) SetStartTime(time time.Time) *Policy {
+func (p *Policy) SetStartAt(time time.Time) *Policy {
 	p.StartTime = time.Format(TimeFormat)
 	return p
 }
 
-func (p *Policy) SetStartTimeStr(time string) *Policy {
+func (p *Policy) SetStartTime(time string) *Policy {
 	p.StartTime = time
 	return p
 }
 
-func (p *Policy) SetExpireTime(time time.Time) *Policy {
+func (p *Policy) SetExpireAt(time time.Time) *Policy {
 	p.ExpireTime = time.Format(TimeFormat)
 	return p
 }
 
-func (p *Policy) SetExpireTimeStr(time string) *Policy {
+func (p *Policy) SetExpireTime(time string) *Policy {
 	p.ExpireTime = time
 	return p
 }
